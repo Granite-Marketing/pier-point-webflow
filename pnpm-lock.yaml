@@ -8,12 +8,6 @@ dependencies:
   '@finsweet/ts-utils':
     specifier: ^0.40.0
     version: 0.40.0
-  gsap:
-    specifier: npm:@gsap/shockingly@^3.12.7
-    version: /@gsap/shockingly@3.12.7
-  swiper:
-    specifier: ^11.1.1
-    version: 11.1.1
 
 devDependencies:
   '@changesets/changelog-git':
@@ -550,10 +544,6 @@ packages:
     dependencies:
       typescript: 5.2.2
     dev: true
-
-  /@gsap/shockingly@3.12.7:
-    resolution: {integrity: sha512-uvbaCkQCdjy7bNvzBWE21dVFa32uqBzCZfYgNRikcFn2SqyQ0/fDUJkfAtme9tdkv3n+niBpdGraLjVA26tTWQ==}
-    dev: false
 
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
@@ -2861,11 +2851,6 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
-
-  /swiper@11.1.1:
-    resolution: {integrity: sha512-jGmEA/fNz1lACIcY4/40ggm1Gcyv+EUivmgV/Jd2WFPsEJhbWXnRAwzZR8OPjkBLtDxmzcoYG/iiAMWfRs0YKQ==}
-    engines: {node: '>= 4.7.0'}
-    dev: false
 
   /synckit@0.8.5:
     resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}

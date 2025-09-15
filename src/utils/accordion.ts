@@ -14,8 +14,11 @@ export const accordion = () => {
       item.setAttribute('aria-controls', accordionTargetId);
 
       // Target
-      item.nextSibling.id = accordionTargetId;
-      item.nextSibling.setAttribute('labelledby', accordionId);
+      const target = item.nextElementSibling;
+      if (target) {
+        target.id = accordionTargetId;
+        target.setAttribute('aria-labelledby', accordionId);
+      }
 
       item.addEventListener('click', () => {
         toggleAccordion(item);
@@ -23,12 +26,14 @@ export const accordion = () => {
     });
   }
 
-  function toggleAccordion(item) {
+  function toggleAccordion(item: any) {
     let ariaExpanded = item.getAttribute('aria-expanded');
     ariaExpanded = ariaExpanded === 'true' ? 'false' : 'true';
     item.setAttribute('aria-expanded', ariaExpanded);
     item.classList.toggle('is-active');
-    const text = item.nextSibling;
-    text.classList.toggle('is-active');
+    const text = item.nextElementSibling;
+    if (text) {
+      text.classList.toggle('is-active');
+    }
   }
 };

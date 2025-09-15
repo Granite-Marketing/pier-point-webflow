@@ -1,3 +1,5 @@
+declare const Swiper: any;
+
 export const swiperSliders = () => {
   const sliderWrapper = document.querySelectorAll('.swiper_slider');
 
