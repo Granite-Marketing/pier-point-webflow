@@ -3,6 +3,9 @@ export const accordion = () => {
 
   if (accordionTrigger) {
     accordionTrigger.forEach((item, index) => {
+      const contentWrapper = item.nextElementSibling;
+      contentWrapper.style.maxHeight = '0px';
+
       /*
        ** Set accessibility
        */
@@ -14,26 +17,38 @@ export const accordion = () => {
       item.setAttribute('aria-controls', accordionTargetId);
 
       // Target
-      const target = item.nextElementSibling;
-      if (target) {
-        target.id = accordionTargetId;
-        target.setAttribute('aria-labelledby', accordionId);
-      }
+      item.nextSibling.id = accordionTargetId;
+      item.nextSibling.setAttribute('labelledby', accordionId);
 
       item.addEventListener('click', () => {
-        toggleAccordion(item);
+        const contentWrapperHeight =
+          contentWrapper.querySelector('.accordion_content').offsetHeight;
+        toggleAccordion(item, contentWrapperHeight);
       });
     });
   }
 
-  function toggleAccordion(item: any) {
+  function toggleAccordion(item, height) {
+    // Close all other accordion items first
+    accordionTrigger.forEach((otherItem) => {
+      if (otherItem !== item) {
+        otherItem.setAttribute('aria-expanded', 'false');
+        otherItem.classList.remove('is-active');
+        const otherContent = otherItem.nextElementSibling;
+        if (otherContent) {
+          otherContent.style.maxHeight = '0px';
+        }
+      }
+    });
+
+    // Toggle the clicked item
     let ariaExpanded = item.getAttribute('aria-expanded');
     ariaExpanded = ariaExpanded === 'true' ? 'false' : 'true';
     item.setAttribute('aria-expanded', ariaExpanded);
     item.classList.toggle('is-active');
     const text = item.nextElementSibling;
     if (text) {
-      text.classList.toggle('is-active');
+      text.style.maxHeight = text.style.maxHeight === '0px' ? `${height + 9 * 14}px` : '0px';
     }
   }
 };
