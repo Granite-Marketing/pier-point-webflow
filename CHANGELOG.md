@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.1
+
+### Patch Changes
+
+- 101613d: Menu Button and Accordion
+
 ## 1.0.0
 
 ### Major Changes
