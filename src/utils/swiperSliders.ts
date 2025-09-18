@@ -1,52 +1,30 @@
 declare const Swiper: any;
 
 export const swiperSliders = () => {
-  const sliderWrapper = document.querySelectorAll('.swiper_slider');
+  const sliderWrapper = document.querySelectorAll('[swiper_slider]');
 
   if (sliderWrapper) {
     sliderWrapper.forEach((slider) => {
-      const defaultSlider = slider.querySelector('.swiper.default');
-      const nextButton = slider.querySelector('.swiper_button.swiper-button-next');
-      const splitSlider = slider.querySelector('.swiper.split');
-      const children = slider.querySelectorAll('.image-slider_item');
+      const defaultSlider = slider.querySelector('[swiper][swiper-default]');
+      const swiperWrapper = slider.querySelector('[swiper-wrapper]');
+      const swiperSlides = slider.querySelectorAll('[swiper-slide]');
+      const nextEl = slider.querySelector('[swiper-button-next]');
+      const prevEl = slider.querySelector('[swiper-button-prev]');
 
       if (defaultSlider) {
-        if (children.length === 1) {
-          nextButton?.classList.add('hide');
-          nextButton?.setAttribute('aria-hidden', 'true');
-        }
-        const swiper = new Swiper(defaultSlider, {
+        defaultSlider.classList.add('swiper');
+        swiperWrapper?.classList.add('swiper-wrapper');
+        swiperSlides.forEach((s) => s.classList.add('swiper-slide'));
+
+        const swiper = new Swiper(defaultSlider as HTMLElement, {
           loop: true,
           speed: 1000,
           slidesPerView: 'auto',
-          navigation: {
-            nextEl: nextButton,
-          },
-        });
-      }
-
-      if (splitSlider) {
-        const swiper = new Swiper(splitSlider, {
-          loop: false,
-          speed: 1000,
-          freeMode: true,
           grabCursor: true,
-          mousewheel: {
-            forceToAxis: 'horizontal',
-          },
+          watchSlidesProgress: true,
           navigation: {
-            nextEl: nextButton,
-          },
-          breakpoints: {
-            0: {
-              /* when window >=0px - webflow mobile landscape/portriat */ slidesPerView: 1.05,
-            },
-            767: {
-              /* when window >= 767px - webflow tablet */ slidesPerView: 1.25,
-            },
-            992: {
-              slidesPerView: 1.25,
-            },
+            prevEl: prevEl,
+            nextEl: nextEl,
           },
         });
       }
