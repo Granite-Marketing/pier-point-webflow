@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.2
+
+### Patch Changes
+
+- 3317462: Swipers
+
 ## 1.0.1
 
 ### Patch Changes
