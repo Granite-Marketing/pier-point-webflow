@@ -20,7 +20,8 @@ export const accordion = () => {
       item.nextSibling.id = accordionTargetId;
       item.nextSibling.setAttribute('labelledby', accordionId);
 
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
         const contentWrapperHeight =
           contentWrapper.querySelector('.accordion_content').offsetHeight;
         toggleAccordion(item, contentWrapperHeight);
