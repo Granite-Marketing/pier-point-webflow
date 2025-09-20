@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.3
+
+### Patch Changes
+
+- 8ee2e9c: modal, sorting, accordion
+
 ## 1.0.2
 
 ### Patch Changes
