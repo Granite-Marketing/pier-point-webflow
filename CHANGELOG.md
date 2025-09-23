@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.4
+
+### Patch Changes
+
+- 5dd5974: Interactive map
+
 ## 1.0.3
 
 ### Patch Changes
