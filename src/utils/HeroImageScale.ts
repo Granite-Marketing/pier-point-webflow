@@ -1,8 +1,6 @@
-import gsap from 'gsap';
-import { Flip } from 'gsap/Flip';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(Flip, ScrollTrigger);
+declare const gsap: any;
+declare const ScrollTrigger: any;
+declare const Flip: any;
 
 export const heroImageAnimations = () => {
   //   const heroImage = document.querySelector('[hero-image-masker]:nth-child(3)'); // in general take random one
