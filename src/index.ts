@@ -1,4 +1,5 @@
 import { accordion } from '$utils/accordion';
+import { dualImage } from '$utils/DualImage';
 import { floatingMenu } from '$utils/floatingMenu';
 import { gsapBasicAnimations } from '$utils/gsapBasicAnimations';
 import { gsapSmoothScroll } from '$utils/gsapSmoothScroll';
@@ -21,6 +22,7 @@ window.Webflow.push(() => {
   swiperSliders();
   modals();
   heroImageAnimations();
+  dualImage();
   setTimeout(() => {
     initMap();
   }, 1000);
