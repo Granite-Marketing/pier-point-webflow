@@ -5,8 +5,8 @@ declare const Flip: any;
 export const heroImageAnimations = () => {
   //   const heroImage = document.querySelector('[hero-image-masker]:nth-child(3)'); // in general take random one
   const heroMask = document.querySelector('.section_hero-mask') as HTMLElement;
-  const initialImages = document.querySelectorAll('.hero-mask_fig') as NodeListOf<HTMLElement>;
-  const heroImage = initialImages[Math.floor(Math.random() * initialImages.length)] as HTMLElement;
+  const heroImage = document.querySelector('.hero-mask_fig:has(video)');
+
   const newHeroImageHolder = document.querySelector(
     '.section_hero-home .hero-home_bg'
   ) as HTMLElement;
