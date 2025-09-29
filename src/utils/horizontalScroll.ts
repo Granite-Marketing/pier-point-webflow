@@ -17,7 +17,7 @@ export const horizontalScroll = () => {
         start: 'left left',
         end: `+=${scrollWrapper.getBoundingClientRect().width}`,
         scrub: true,
-        markers: true,
+        markers: false,
         pin: true,
         animation: tl,
       });
