@@ -2,9 +2,13 @@ declare const gsap: any;
 declare const ScrollTrigger: any;
 declare const Lenis: any;
 
+let lenis = null;
+
 export const gsapSmoothScroll = () => {
   // Initialize a new Lenis instance for smooth scrolling
-  const lenis = new Lenis();
+  lenis = new Lenis({
+    prevent: (node) => node.getAttribute('data-prevent-lenis') === 'true',
+  });
 
   // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
   lenis.on('scroll', ScrollTrigger.update);
@@ -17,4 +21,12 @@ export const gsapSmoothScroll = () => {
 
   // Disable lag smoothing in GSAP to prevent any delay in scroll animations
   gsap.ticker.lagSmoothing(0);
+};
+
+export const stopSmoothScroll = () => {
+  lenis.stop();
+};
+
+export const startSmoothScroll = () => {
+  lenis.start();
 };
