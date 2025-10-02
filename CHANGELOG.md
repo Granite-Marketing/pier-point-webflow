@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.5
+
+### Patch Changes
+
+- eb2c99e: Modal be scrollable
+
 ## 1.0.4
 
 ### Patch Changes
