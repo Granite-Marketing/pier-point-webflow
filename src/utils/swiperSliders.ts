@@ -50,9 +50,11 @@ export const swiperSliders = () => {
       swiper = new Swiper(swiperEl as HTMLElement, {
         loop: true,
         speed: 1000,
-        slidesPerView: 'auto',
         effect: 'fade',
-        slidersPerView: 1,
+        fadeEffect: {
+          crossFade: true,
+        },
+        slidersPerView: 'auto',
         autoplay: {
           delay: 1000,
           disableOnInteraction: false,
@@ -67,6 +69,7 @@ export const swiperSliders = () => {
     }
 
     console.log('isController', isController, swiperEl, swiper);
+
     if (swiper && isController) {
       const controlId = swiperEl.getAttribute('swiper-control-id');
       if (!controlId) return;
@@ -78,11 +81,14 @@ export const swiperSliders = () => {
 
       const controllableSwiper = new Swiper(syncedSwiper as HTMLElement, {
         loop: true,
-        slidesPerView: 1,
         effect: 'fade',
+        fadeEffect: {
+          crossFade: true,
+        },
+        slidersPerView: 'auto',
         grabCursor: false,
-        watchSlidesProgress: true,
-        allowTouchMove: false,
+        watchSlidesProgress: false,
+        disableOnInteraction: false,
       });
       swiper.controller.control = controllableSwiper;
     }
