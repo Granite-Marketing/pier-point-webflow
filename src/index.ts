@@ -5,6 +5,7 @@ import { gsapBasicAnimations } from '$utils/gsapBasicAnimations';
 import { gsapSmoothScroll } from '$utils/gsapSmoothScroll';
 import { heroImageAnimations } from '$utils/HeroImageScale';
 import { horizontalScroll } from '$utils/horizontalScroll';
+import { imageNarrow } from '$utils/ImageNarrow';
 import { imagesScroll } from '$utils/imagesScroll';
 import { initMap } from '$utils/map';
 import { mapNeeds } from '$utils/mapNeeds';
@@ -27,6 +28,7 @@ window.Webflow.push(() => {
   dualImage();
   horizontalScroll();
   imagesScroll();
+  imageNarrow();
   setTimeout(() => {
     initMap();
   }, 1000);
