@@ -54,6 +54,7 @@ export const swiperSliders = () => {
         fadeEffect: {
           crossFade: true,
         },
+        spaceBetween: 0,
         slidersPerView: 'auto',
         autoplay: {
           delay: 1000,

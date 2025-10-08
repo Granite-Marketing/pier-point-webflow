@@ -2,8 +2,6 @@ import { stopSmoothScroll, startSmoothScroll } from '$utils/gsapSmoothScroll';
 
 export const modals = () => {
   const modalButtons = document.querySelectorAll('[button-function="modal-open"]');
-  window.dev_currentScroll = 0;
-
   modalButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
