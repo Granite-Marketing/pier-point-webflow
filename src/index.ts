@@ -1,4 +1,5 @@
 import { accordion } from '$utils/accordion';
+import { diningSwiper } from '$utils/diningSwiper';
 import { dualImage } from '$utils/dualImage';
 import { floatingMenu } from '$utils/floatingMenu';
 import { gsapBasicAnimations } from '$utils/gsapBasicAnimations';
@@ -23,6 +24,7 @@ window.Webflow.push(() => {
   accordion();
   gsapBasicAnimations();
   swiperSliders();
+  diningSwiper();
   modals();
   heroImageAnimations();
   dualImage();
