@@ -6,8 +6,8 @@ export const diningSwiper = () => {
   const swiperWrapper = swiperEl.querySelector('.slider-2_collection');
   const swiperSlides = swiperWrapper?.querySelectorAll('.slider-2_item');
 
-  const nextEl = swiperEl.querySelector('[swiper-button-next]') ?? null;
-  const prevEl = swiperEl.querySelector('[swiper-button-prev]') ?? null;
+  const nextEl = swiperEl.parentElement.querySelector('[swiper-button-next]') ?? null;
+  const prevEl = swiperEl.parentElement.querySelector('[swiper-button-prev]') ?? null;
 
   swiperEl.classList.add('swiper');
   swiperWrapper?.classList.add('swiper-wrapper');
