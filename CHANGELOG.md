@@ -5,7 +5,9 @@
 ### Patch Changes
 
 - 5850139: New updates! Horizontal scroll, etc
+
 - 5d34822: Retry changeset
+
 
 ## 1.0.5
 
