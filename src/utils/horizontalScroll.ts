@@ -2,7 +2,7 @@ declare const gsap: any;
 declare const ScrollTrigger: any;
 
 export const horizontalScroll = () => {
-  if (matchMedia('media screen and (min-width: 992px)').matches === false) return;
+  if (matchMedia('(min-width: 992px)').matches === false) return;
   const horizontalScrollSections = document.querySelectorAll('.h-scroll_transition-wrap-wrap');
   if (horizontalScrollSections.length > 0) {
     horizontalScrollSections.forEach((section) => {
