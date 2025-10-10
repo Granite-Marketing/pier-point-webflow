@@ -12,6 +12,7 @@ import { imagesScroll } from '$utils/imagesScroll';
 import { initMap } from '$utils/map';
 import { mapNeeds } from '$utils/mapNeeds';
 import { modals } from '$utils/modals';
+import { removeOrphans } from '$utils/removeOrphans';
 import { sortItems } from '$utils/sortItems';
 import { swiperSliders } from '$utils/swiperSliders';
 
@@ -20,6 +21,7 @@ window.Webflow.push(() => {
   console.log('test');
   mapNeeds();
   sortItems();
+  removeOrphans();
   floatingMenu();
   gsapSmoothScroll();
   accordion();
