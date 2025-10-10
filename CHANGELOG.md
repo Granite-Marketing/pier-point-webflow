@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.10
+
+### Patch Changes
+
+- 2143123: new indexts forgot to add
+
 ## 1.0.9
 
 ### Patch Changes
