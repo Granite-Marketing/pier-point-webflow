@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.9
+
+### Patch Changes
+
+- f7e4733: Horizontal scroll correction, Nav Color theme
+
 ## 1.0.8
 
 ### Patch Changes
