@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.11
+
+### Patch Changes
+
+- 9dfa4b2: Basic orphan removal (no edge cases)
+
 ## 1.0.10
 
 ### Patch Changes
