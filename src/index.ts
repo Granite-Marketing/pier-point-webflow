@@ -1,4 +1,5 @@
 import { accordion } from '$utils/accordion';
+import { colorScroll } from '$utils/colorScroll';
 import { diningSwiper } from '$utils/diningSwiper';
 import { dualImage } from '$utils/dualImage';
 import { floatingMenu } from '$utils/floatingMenu';
@@ -31,6 +32,7 @@ window.Webflow.push(() => {
   horizontalScroll();
   imagesScroll();
   imageNarrow();
+  colorScroll();
   setTimeout(() => {
     initMap();
   }, 1000);
