@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.8
+
+### Patch Changes
+
+- f421237: Horizontal scroll is desktop only
+
 ## 1.0.7
 
 ### Patch Changes
