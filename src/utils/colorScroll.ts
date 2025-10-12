@@ -36,7 +36,7 @@ export const colorScroll = () => {
       breakpointSetting = attr(0, targetStylesheet.getAttribute('min-width'));
     gsap.registerPlugin(ScrollTrigger);
 
-    const triggerElements = document.querySelectorAll('section');
+    const triggerElements = document.querySelectorAll('section, footer.footer, [color-mode]');
     triggerElements.forEach((element, index) => {
       let modeIndex = 1;
       if (element.hasAttribute('color-mode')) {
