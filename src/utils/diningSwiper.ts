@@ -1,6 +1,8 @@
-import EmblaCarousel, { type EmblaCarouselType } from 'embla-carousel';
-import gsap from 'gsap';
-import _SplitText, { SplitText } from 'gsap/SplitText';
+declare const SplitText: any;
+declare const gsap: any;
+declare const EmblaCarousel: any;
+type EmblaCarouselType = any; // need to fix those
+type _SplitText = any; // need to fix those
 
 type SplitsHolders = {
   numSplit: _SplitText | null;
