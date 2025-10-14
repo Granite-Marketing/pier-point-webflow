@@ -3,6 +3,7 @@ import { colorScroll } from '$utils/colorScroll';
 import { diningSwiper } from '$utils/diningSwiper';
 import { dualImage } from '$utils/dualImage';
 import { floatingMenu } from '$utils/floatingMenu';
+import { fsCmsFilter } from '$utils/fsCmsFilter';
 import { gsapBasicAnimations } from '$utils/gsapBasicAnimations';
 import { gsapSmoothScroll } from '$utils/gsapSmoothScroll';
 import { heroImageAnimations } from '$utils/HeroImageScale';
@@ -22,6 +23,7 @@ window.Webflow.push(() => {
   mapNeeds();
   sortItems();
   removeOrphans();
+  fsCmsFilter();
   floatingMenu();
   gsapSmoothScroll();
   accordion();
@@ -35,6 +37,7 @@ window.Webflow.push(() => {
   imagesScroll();
   imageNarrow();
   colorScroll();
+
   setTimeout(() => {
     initMap();
   }, 1000);
