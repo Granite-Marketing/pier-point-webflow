@@ -353,5 +353,6 @@ class DiningSlider {
 export const diningSlider = () => {
   const textSliderEl = document.querySelector('.slider-2_collection-wrap.is-texts');
   const imagesSliderEl = document.querySelector('.slider-2_collection-wrap.is-images');
+  if (!textSliderEl || !imagesSliderEl) return;
   new DiningSlider(textSliderEl as HTMLElement, imagesSliderEl as HTMLElement);
 };
