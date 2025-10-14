@@ -1,6 +1,6 @@
 import { accordion } from '$utils/accordion';
 import { colorScroll } from '$utils/colorScroll';
-import { diningSwiper } from '$utils/diningSwiper';
+import { diningSlider } from '$utils/diningSwiper';
 import { dualImage } from '$utils/dualImage';
 import { floatingMenu } from '$utils/floatingMenu';
 import { fsCmsFilter } from '$utils/fsCmsFilter';
@@ -29,7 +29,7 @@ window.Webflow.push(() => {
   accordion();
   gsapBasicAnimations();
   swiperSliders();
-  diningSwiper();
+  diningSlider();
   modals();
   heroImageAnimations();
   dualImage();
