@@ -35,7 +35,7 @@ class DiningSlider {
     this.imagesSlides = null;
     this.nextEl = null;
     this.prevEl = null;
-    this.options = { loop: true, duration: 0 };
+    this.options = { loop: true, duration: 0, watchDrag: false };
     this.textEmblaApi = null;
     this.imagesEmblaApi = null;
     this.isAnimating = false;
@@ -61,7 +61,6 @@ class DiningSlider {
     this.imagesSlides = this.imagesSliderEl?.querySelectorAll(
       '.slider-2_collection .slider-2_item'
     );
-    console.log(this.imagesSliderEl);
 
     this.nextEl = this.textSliderEl.parentElement!.querySelector('[swiper-button-next]');
     this.prevEl = this.textSliderEl.parentElement!.querySelector('[swiper-button-prev]');
