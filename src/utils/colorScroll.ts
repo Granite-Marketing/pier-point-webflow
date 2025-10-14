@@ -38,6 +38,7 @@ export const colorScroll = () => {
 
     const triggerElements = document.querySelectorAll('section, footer.footer, [color-mode]');
     triggerElements.forEach((element, index) => {
+      if (element.hasAttribute('color-mode-ignore')) return;
       let modeIndex = 1;
       if (element.hasAttribute('color-mode')) {
         modeIndex = element?.getAttribute('color-mode') ?? '1';
@@ -47,7 +48,12 @@ export const colorScroll = () => {
         console.log(element.classList[0], bgColor);
         if (bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') modeIndex = 2;
       }
+
       let endSetting = `clamp(bottom ${offsetSetting}%)`;
+
+      if (element.getBoundingClientRect().height <= window.innerHeight)
+        endSetting = `clamp(bottom -${offsetSetting}%)`;
+
       if (index === triggerElements.length - 1) endSetting = `bottom ${offsetSetting}%`;
       gsap.matchMedia().add(`(min-width: ${breakpointSetting}px)`, () => {
         const colorScroll = gsap.timeline({

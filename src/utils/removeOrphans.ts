@@ -2,6 +2,7 @@ function preventOrphans(selector) {
   const elements = document.querySelectorAll(selector);
 
   elements.forEach((element) => {
+    if (element.hasAttribute('ignore-orphan')) return;
     if (!element.textContent) return;
     if (element.children.length) return console.log(element, 'has children, skipping');
 

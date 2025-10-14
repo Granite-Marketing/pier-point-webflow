@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.12
+
+### Patch Changes
+
+- b138f15: Ignore orphans, Ignore dining swiper on other pages
+
 ## 1.0.11
 
 ### Patch Changes
