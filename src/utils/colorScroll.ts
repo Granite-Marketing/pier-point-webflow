@@ -38,30 +38,55 @@ export const colorScroll = () => {
 
     const triggerElements = document.querySelectorAll('section, footer.footer, [color-mode]');
     triggerElements.forEach((element, index) => {
-      if (element.hasAttribute('color-mode-ignore')) return;
+      let triggerElement = element;
+      let startSetting = `clamp(top ${offsetSetting}%)`;
+
+      let endSetting = `clamp(bottom ${offsetSetting}%)`;
+      if (index === triggerElements.length - 1) endSetting = `bottom ${offsetSetting}%`;
+
+      if (element.classList.contains('section_h-scroll')) {
+        return;
+        // const width = element.getBoundingClientRect().width;
+        // console.log('THIS width', width);
+        // endSetting = `clamp(top ${width}px)`;
+      } else if (
+        element.classList.contains('section_img-mosaic') &&
+        element.classList.contains('is-transition')
+      ) {
+        const hori = element.previousElementSibling;
+        const width = hori.getBoundingClientRect().width;
+        const height = element.getBoundingClientRect().height;
+        console.log('THAT width', width);
+        startSetting = `top ${width}px`;
+        endSetting = `top ${width + height}px`;
+        triggerElement = hori;
+      } else if (element.hasAttribute('color-mode-ignore')) return;
+
       let modeIndex = 1;
       if (element.hasAttribute('color-mode')) {
         modeIndex = element?.getAttribute('color-mode') ?? '1';
         modeIndex = parseInt(modeIndex);
       } else {
         const bgColor = getComputedStyle(element).getPropertyValue('background-color');
-        console.log(element.classList[0], bgColor);
         if (bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') modeIndex = 2;
       }
 
-      let endSetting = `clamp(bottom ${offsetSetting}%)`;
+      console.log(
+        element.getAttribute('class'),
+        triggerElement.getAttribute('class'),
+        startSetting,
+        endSetting,
+        modeIndex
+      );
 
-      if (element.getBoundingClientRect().height <= window.innerHeight)
-        endSetting = `clamp(bottom -${offsetSetting}%)`;
-
-      if (index === triggerElements.length - 1) endSetting = `bottom ${offsetSetting}%`;
       gsap.matchMedia().add(`(min-width: ${breakpointSetting}px)`, () => {
         const colorScroll = gsap.timeline({
           scrollTrigger: {
             trigger: element,
-            start: `clamp(top ${offsetSetting}%)`,
+            start: startSetting,
             end: endSetting,
             toggleActions: 'play complete none reverse',
+            markers: true,
           },
         });
         colorScroll.to('body', {
