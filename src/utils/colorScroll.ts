@@ -49,13 +49,14 @@ export const colorScroll = () => {
         // const width = element.getBoundingClientRect().width;
         // console.log('THIS width', width);
         // endSetting = `clamp(top ${width}px)`;
-      } else if (
+      }
+      if (
         element.classList.contains('section_img-mosaic') &&
         element.classList.contains('is-transition')
       ) {
         const hori = element.previousElementSibling;
-        const width = hori.getBoundingClientRect().width;
-        const height = element.getBoundingClientRect().height;
+        const { width } = hori.getBoundingClientRect();
+        const { height } = element.getBoundingClientRect();
         console.log('THAT width', width);
         startSetting = `top ${width}px`;
         endSetting = `top ${width + height}px`;
@@ -86,7 +87,7 @@ export const colorScroll = () => {
             start: startSetting,
             end: endSetting,
             toggleActions: 'play complete none reverse',
-            markers: true,
+            markers: false,
           },
         });
         colorScroll.to('body', {
@@ -100,7 +101,7 @@ export const colorScroll = () => {
 
   // Handle different heading styles
   const mainWrapper = document.querySelector('.main-wrapper');
-  const navColor = mainWrapper.dataset.navColor;
+  const { navColor } = mainWrapper.dataset;
   console.log(navColor);
   if (navColor === 'light') {
     // Clear nav scroll styles on navigation
