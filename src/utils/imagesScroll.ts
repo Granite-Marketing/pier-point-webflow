@@ -32,17 +32,21 @@ export const imagesScroll = () => {
       });
       mm.add('(max-width: 767px)', () => {
         const tl = gsap.timeline();
-        tl.to(images, {
-          x: `-${images.length * 100}%`,
-          ease: 'none',
+        tl.to(section, {
+          width: '100%',
+          height: '100%',
         });
+        // .to(images, {
+        //   x: `-${images.length * 100}%`,
+        //   // ease: 'none',
+        //   scrub: true,
+        // });
         ScrollTrigger.create({
           trigger: section,
           markers: false,
           pin: true,
-          scrub: true,
           start: 'top top',
-          end: `+=${images.length * 100}%`,
+          // end: `+=${images.length * 100}%`,
           animation: tl,
         });
       });

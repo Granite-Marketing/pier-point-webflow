@@ -45,7 +45,8 @@ export const dualImage = () => {
 
         if (headerTitle) {
           const titleSplit = new SplitText(headerTitle, {
-            type: 'chars,lines',
+            type: 'words,lines',
+            mask: 'lines',
           });
           const parent = headerTitle.parentElement;
           const isRotated = parent?.hasAttribute('data-90deg-text');
@@ -57,7 +58,7 @@ export const dualImage = () => {
           });
           if (isRotated) {
             tl.fromTo(
-              titleSplit.chars,
+              titleSplit.lines,
               {
                 xPercent: 100,
               },
@@ -70,7 +71,7 @@ export const dualImage = () => {
             );
           } else {
             tl.fromTo(
-              titleSplit.chars,
+              titleSplit.lines,
               {
                 yPercent: 100,
               },
@@ -88,23 +89,24 @@ export const dualImage = () => {
           paragraphs.forEach((paragraph) => {
             const paragraphSplit = new SplitText(paragraph, {
               type: 'words,lines',
+              mask: 'lines',
             });
             // const animationOrder = paragraph.getAttribute('data-animation-order');
 
             gsap.set(paragraphSplit.lines, {
               overflow: 'hidden',
             });
-            gsap.set(paragraphSplit.words, {
+            gsap.set(paragraphSplit.lines, {
               yPercent: 100,
             });
             tl.to(
-              paragraphSplit.words,
+              paragraphSplit.lines,
               {
                 yPercent: 0,
                 duration: 1,
-                stagger: 0.05,
+                stagger: 0.15,
               },
-              '-=1'
+              '-=.75'
               // animationOrder ?? 0
             );
           });
@@ -113,7 +115,8 @@ export const dualImage = () => {
         if (links.length > 0) {
           links.forEach((link) => {
             const linkSplit = new SplitText(link.querySelector('div'), {
-              type: 'chars,lines',
+              type: 'words,lines',
+              mask: 'lines',
             });
             // const animationOrder = link.getAttribute('data-animation-order');
             const icon = link.querySelector('svg');
@@ -123,14 +126,8 @@ export const dualImage = () => {
             gsap.set(linkSplit.lines, {
               overflow: 'hidden',
             });
-            // gsap.set(icon, {
-            //   yPercent: 140,
-            // });
-            // gsap.set(linkSplit.chars, {
-            //   yPercent: 100,
-            // });
             tl.fromTo(
-              linkSplit.chars,
+              linkSplit.lines,
               {
                 yPercent: 100,
               },
@@ -139,7 +136,7 @@ export const dualImage = () => {
                 // duration: 1,
                 stagger: 0.05,
               },
-              '-=1'
+              '-=.75'
             ).fromTo(
               icon,
               {
@@ -150,7 +147,7 @@ export const dualImage = () => {
                 // duration: 1,
                 stagger: 0.1,
               },
-              '-=1'
+              '-=.75'
             );
           });
         }
@@ -158,13 +155,14 @@ export const dualImage = () => {
         if (liItems.length > 0) {
           liItems.forEach((li) => {
             const liSplit = new SplitText(li, {
-              type: 'chars,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             gsap.set(liSplit.lines, {
               overflow: 'hidden',
             });
             tl.fromTo(
-              liSplit.chars,
+              liSplit.lines,
               {
                 yPercent: 120,
               },
@@ -180,7 +178,8 @@ export const dualImage = () => {
         if (otherLinks.length > 0) {
           otherLinks.forEach((otherLink) => {
             const otherLinkSplit = new SplitText(otherLink.querySelector('div'), {
-              type: 'chars,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             gsap.set(otherLink, {
               overflow: 'hidden',
@@ -259,7 +258,8 @@ export const dualImage = () => {
             },
           });
           const titleSplit = new SplitText(headerTitle, {
-            type: 'chars,lines',
+            type: 'lines',
+            mask: 'lines',
           });
           const parent = headerTitle.parentElement;
           const isRotated = parent?.hasAttribute('data-90deg-text');
@@ -269,7 +269,7 @@ export const dualImage = () => {
           });
           if (isRotated) {
             tl.fromTo(
-              titleSplit.chars,
+              titleSplit.lines,
               {
                 xPercent: 100,
               },
@@ -281,7 +281,7 @@ export const dualImage = () => {
             );
           } else {
             tl.fromTo(
-              titleSplit.chars,
+              titleSplit.lines,
               {
                 yPercent: 100,
               },
@@ -323,7 +323,7 @@ export const dualImage = () => {
             tl.to(paragraphSplit.lines, {
               yPercent: 0,
               duration: 1,
-              stagger: 0.1,
+              stagger: 0.01,
             });
             ScrollTrigger.create({
               trigger: paragraph,
@@ -343,7 +343,8 @@ export const dualImage = () => {
               },
             });
             const linkSplit = new SplitText(link.querySelector('div'), {
-              type: 'chars,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             // const animationOrder = link.getAttribute('data-animation-order');
             const icon = link.querySelector('svg');
@@ -354,7 +355,7 @@ export const dualImage = () => {
               overflow: 'hidden',
             });
             tl.fromTo(
-              linkSplit.chars,
+              linkSplit.lines,
               {
                 yPercent: 100,
               },
@@ -393,13 +394,14 @@ export const dualImage = () => {
           });
           liItems.forEach((li) => {
             const liSplit = new SplitText(li, {
-              type: 'chars,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             gsap.set(liSplit.lines, {
               overflow: 'hidden',
             });
             tl.fromTo(
-              liSplit.chars,
+              liSplit.lines,
               {
                 yPercent: 120,
               },
@@ -426,7 +428,8 @@ export const dualImage = () => {
               },
             });
             const otherLinkSplit = new SplitText(otherLink.querySelector('div'), {
-              type: 'chars,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             gsap.set(otherLink, {
               overflow: 'hidden',
