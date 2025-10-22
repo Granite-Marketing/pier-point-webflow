@@ -1,5 +1,6 @@
 declare const gsap: any;
 declare const ScrollTrigger: any;
+// declare const SplitText: any;
 
 export const imagesScroll = () => {
   const sections = document.querySelectorAll('.section_flashy-gallery .flashy-gallery_component');
@@ -9,8 +10,14 @@ export const imagesScroll = () => {
       const mm = gsap.matchMedia();
       mm.add('(min-width: 768px)', () => {
         const tl = gsap.timeline();
+        // const titleSplit = new SplitText(section.querySelector('.flashy-gallery_title'), {
+        //   type: 'chars,lines',
+        // });
+        // gsap.set(titleSplit.lines, {
+        //   overflow: 'hidden',
+        // });
         tl.to(images, {
-          y: `-${images.length * 50}%`,
+          y: `-${images.length * 100}%`,
           ease: 'none',
         });
         ScrollTrigger.create({
@@ -19,14 +26,14 @@ export const imagesScroll = () => {
           pin: true,
           scrub: true,
           start: 'top top',
-          end: `+=${images.length * 50}%`,
+          end: `+=${images.length * 75}%`,
           animation: tl,
         });
       });
       mm.add('(max-width: 767px)', () => {
         const tl = gsap.timeline();
         tl.to(images, {
-          x: `-${images.length * 50}%`,
+          x: `-${images.length * 100}%`,
           ease: 'none',
         });
         ScrollTrigger.create({
@@ -35,7 +42,7 @@ export const imagesScroll = () => {
           pin: true,
           scrub: true,
           start: 'top top',
-          end: `+=${images.length * 50}%`,
+          end: `+=${images.length * 100}%`,
           animation: tl,
         });
       });
