@@ -309,20 +309,21 @@ export const dualImage = () => {
               },
             });
             const paragraphSplit = new SplitText(paragraph, {
-              type: 'words,lines',
+              type: 'lines',
+              mask: 'lines',
             });
             // const animationOrder = paragraph.getAttribute('data-animation-order');
 
             gsap.set(paragraphSplit.lines, {
               overflow: 'hidden',
             });
-            gsap.set(paragraphSplit.words, {
+            gsap.set(paragraphSplit.lines, {
               yPercent: 100,
             });
-            tl.to(paragraphSplit.words, {
+            tl.to(paragraphSplit.lines, {
               yPercent: 0,
               duration: 1,
-              stagger: 0.05,
+              stagger: 0.1,
             });
             ScrollTrigger.create({
               trigger: paragraph,
