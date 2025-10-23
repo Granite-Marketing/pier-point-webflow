@@ -77,7 +77,6 @@ const paragraphsAnimation = (paragraphs: NodeListOf<Element>, tl: any, order?: s
       type: 'words,lines',
       mask: 'lines',
     });
-    // const animationOrder = paragraph.getAttribute('data-animation-order');
 
     gsap.set(paragraphSplit.lines, {
       overflow: 'hidden',
@@ -168,7 +167,6 @@ export const dualImage = () => {
               type: 'words,lines',
               mask: 'lines',
             });
-            // const animationOrder = link.getAttribute('data-animation-order');
             const icon = link.querySelector('svg');
             gsap.set(link, {
               overflow: 'hidden',
@@ -362,7 +360,6 @@ export const dualImage = () => {
               type: 'lines',
               mask: 'lines',
             });
-            // const animationOrder = paragraph.getAttribute('data-animation-order');
 
             gsap.set(paragraphSplit.lines, {
               overflow: 'hidden',
@@ -411,7 +408,6 @@ export const dualImage = () => {
               },
               {
                 yPercent: 0,
-                // duration: 1,
                 stagger: 0.05,
               }
             ).fromTo(
@@ -421,7 +417,6 @@ export const dualImage = () => {
               },
               {
                 yPercent: 0,
-                // duration: 1,
                 stagger: 0.1,
               },
               '-=1'

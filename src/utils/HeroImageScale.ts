@@ -30,9 +30,7 @@ const mouseMoveAnimation = () => {
     targetHolderY = mouseY;
   });
 
-  // Animation loop for smooth movement with inertia
   function animateImages() {
-    // Smooth interpolation towards target
     currentX += (targetX - currentX) * 0.1;
     currentY += (targetY - currentY) * 0.1;
     currentHolderX += (targetHolderX - currentHolderX) * 0.1;
@@ -40,10 +38,8 @@ const mouseMoveAnimation = () => {
 
     heroImages.forEach((img, index) => {
       const i = index + 1;
-      // const baseOffset = index * 5; // Add offset between images
       const distanceX = (currentX / (window.innerWidth / 2)) * (i * 7);
       const distanceY = (currentY / (window.innerHeight / 2)) * (i * 7);
-      // img.style.transform = `translate(${-distanceX}%, ${-distanceY}%)`;
       gsap.to(img, {
         duration: 0,
         ease: 'power2.inOut',
@@ -51,7 +47,6 @@ const mouseMoveAnimation = () => {
       });
     });
 
-    // Animate main hero image holder with velocity
     const distanceX = (currentHolderX / (window.innerWidth / 2)) * 100;
     const distanceY = (currentHolderY / (window.innerHeight / 2)) * 50;
 
@@ -188,7 +183,6 @@ const introAnimation = () => {
     },
     {
       yPercent: 0,
-      // stagger: 0.15,
       delay: 0.5,
       duration: 1,
       ease: 'expo.out',
@@ -196,16 +190,11 @@ const introAnimation = () => {
   ).fromTo(
     images,
     {
-      // height: 0,
-      // border: '0',
-      // z: 100,
       clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
     },
     {
-      // height: 'auto',
       clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
       duration: 1,
-      // z: 0,
       stagger: 0.05,
       ease: 'expo.out',
     },
@@ -214,7 +203,6 @@ const introAnimation = () => {
 };
 
 export const heroImageAnimations = () => {
-  //   const heroImage = document.querySelector('[hero-image-masker]:nth-child(3)'); // in general take random one
   const heroImage = document.querySelector('.hero-mask_fig:has(video)');
 
   const newHeroImageHolder = document.querySelector(

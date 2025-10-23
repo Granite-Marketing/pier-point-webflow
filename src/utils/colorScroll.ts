@@ -46,9 +46,6 @@ export const colorScroll = () => {
 
       if (element.classList.contains('section_h-scroll')) {
         return;
-        // const width = element.getBoundingClientRect().width;
-        // console.log('THIS width', width);
-        // endSetting = `clamp(top ${width}px)`;
       }
       if (
         element.classList.contains('section_img-mosaic') &&

@@ -168,8 +168,6 @@ class DiningSlider {
         return pSplit;
       });
       const pSplitsLines = pSplits.map((pSplit) => pSplit.lines).flat();
-      // const pSplitsChars = pSplits.map((pSplit) => pSplit.chars).flat();
-      // console.log(pSplitsWords);
 
       const tl = gsap.timeline({
         onComplete: () => {
