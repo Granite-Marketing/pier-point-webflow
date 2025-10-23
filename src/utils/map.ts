@@ -1,7 +1,7 @@
 // Initialize and add the map
 let map;
 const markers = [];
-var infoWindow;
+let infoWindow;
 const colors = {
   normal: { bg: '#FFFDF7', line: '#272516' },
   active: { bg: '#272516', line: '#FFFDF7' },
@@ -106,7 +106,7 @@ const createMarker = async (p, active, infoWindow) => {
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
 
   const parser = new DOMParser();
-  let svgHtml = p.unique ? uniquePinSvgString : active ? activePinSvgString : pinSvgString;
+  const svgHtml = p.unique ? uniquePinSvgString : active ? activePinSvgString : pinSvgString;
   const pinSvg = parser.parseFromString(svgHtml, 'image/svg+xml').documentElement;
 
   const marker = new AdvancedMarkerElement({
@@ -183,13 +183,12 @@ const mapInteractions = (positions, infoWindow) => {
 };
 
 const readPinColors = (mapEl) => {
-  let c0 = mapEl.getAttribute('color-pin') ?? null;
-  let c1 = mapEl.getAttribute('color-pin-line') ?? null;
-  let c2 = mapEl.getAttribute('color-active-pin') ?? null;
-  let c3 = mapEl.getAttribute('color-active-pin-line') ?? null;
-  let c4 = mapEl.getAttribute('color-unique-pin') ?? null;
-  console.log('hello', c4);
-  let c5 = mapEl.getAttribute('color-unique-pin-line') ?? null;
+  const c0 = mapEl.getAttribute('color-pin') ?? null;
+  const c1 = mapEl.getAttribute('color-pin-line') ?? null;
+  const c2 = mapEl.getAttribute('color-active-pin') ?? null;
+  const c3 = mapEl.getAttribute('color-active-pin-line') ?? null;
+  const c4 = mapEl.getAttribute('color-unique-pin') ?? null;
+  const c5 = mapEl.getAttribute('color-unique-pin-line') ?? null;
 
   if (c0) colors.normal.bg = c0;
   if (c1) colors.normal.line = c1;

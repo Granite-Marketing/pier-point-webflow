@@ -57,7 +57,6 @@ export const colorScroll = () => {
         const hori = element.previousElementSibling;
         const { width } = hori.getBoundingClientRect();
         const { height } = element.getBoundingClientRect();
-        console.log('THAT width', width);
         startSetting = `top ${width}px`;
         endSetting = `top ${width + height}px`;
         triggerElement = hori;
@@ -71,14 +70,6 @@ export const colorScroll = () => {
         const bgColor = getComputedStyle(element).getPropertyValue('background-color');
         if (bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') modeIndex = 2;
       }
-
-      console.log(
-        element.getAttribute('class'),
-        triggerElement.getAttribute('class'),
-        startSetting,
-        endSetting,
-        modeIndex
-      );
 
       gsap.matchMedia().add(`(min-width: ${breakpointSetting}px)`, () => {
         const colorScroll = gsap.timeline({
@@ -102,7 +93,6 @@ export const colorScroll = () => {
   // Handle different heading styles
   const mainWrapper = document.querySelector('.main-wrapper');
   const { navColor } = mainWrapper.dataset;
-  console.log(navColor);
   if (navColor === 'light') {
     // Clear nav scroll styles on navigation
     setTimeout(() => {

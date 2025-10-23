@@ -23,8 +23,6 @@ export const swiperSliders = () => {
     const swiperSlides = slider.querySelectorAll('[swiper-slide]');
     const nextEl = slider.querySelector('[swiper-button-next]') ?? null;
     const prevEl = slider.querySelector('[swiper-button-prev]') ?? null;
-    console.log('slider', slider);
-    console.log('nextEl, prevEl', nextEl, prevEl);
     const isController = swiperEl?.hasAttribute('swiper-controller');
 
     let swiper = null;
@@ -69,15 +67,12 @@ export const swiperSliders = () => {
       });
     }
 
-    console.log('isController', isController, swiperEl, swiper);
-
     if (swiper && isController) {
       const controlId = swiperEl.getAttribute('swiper-control-id');
       if (!controlId) return;
       const syncedSwiper = document.querySelector(
         `[swiper-controllable][swiper-control-id="${controlId}"]`
       );
-      console.log('syncedSwiper', syncedSwiper);
       if (!syncedSwiper) return;
 
       const controllableSwiper = new Swiper(syncedSwiper as HTMLElement, {
