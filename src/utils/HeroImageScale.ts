@@ -81,7 +81,7 @@ export const heroImageAnimations = () => {
     const textTl = gsap.timeline({
       defaults: {
         duration: 1,
-        ease: (i) => 1 - Math.pow(1 - i, 4),
+        ease: (i: number) => 1 - Math.pow(1 - i, 4),
       },
     });
 

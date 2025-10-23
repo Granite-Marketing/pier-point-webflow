@@ -6,6 +6,7 @@ export const imageNarrow = () => {
   const imageNarrow = document.querySelector('.hero_fig');
   const image = imageNarrow?.querySelector('img');
   const tl = gsap.timeline();
+
   gsap.set(imageNarrow, {
     overflow: 'hidden',
   });
@@ -19,7 +20,7 @@ export const imageNarrow = () => {
   tl.to(
     image,
     {
-      y: -100,
+      y: 100,
       scale: 1.2,
     },
     '0'
@@ -27,8 +28,8 @@ export const imageNarrow = () => {
 
   ScrollTrigger.create({
     trigger: imageNarrow,
-    start: 'top 30%',
-    end: 'center center',
+    start: 'top 40%',
+    end: 'bottom center',
     scrub: true,
     markers: false,
     animation: tl,
