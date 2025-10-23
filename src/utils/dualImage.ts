@@ -2,12 +2,107 @@ declare const gsap: any;
 declare const ScrollTrigger: any;
 declare const SplitText: any;
 
+const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
+  const titleSplit = new SplitText(headerTitle, {
+    type: 'words,lines',
+    mask: 'lines',
+  });
+  const parent = headerTitle.parentElement;
+  const isRotated = parent?.hasAttribute('data-90deg-text');
+
+  const animationOrder = headerTitle.getAttribute('data-animation-order');
+
+  gsap.set(titleSplit.lines, {
+    overflow: 'hidden',
+  });
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 768px)', () => {
+    gsap.set(headerTitle, {
+      textWrap: 'nowrap',
+    });
+  });
+  mm.add('(max-width: 767px)', () => {
+    gsap.set(headerTitle, {
+      textWrap: 'wrap',
+    });
+  });
+  if (isRotated) {
+    tl.fromTo(
+      titleSplit.lines,
+      {
+        xPercent: 100,
+      },
+      {
+        xPercent: 0,
+        stagger: 0.05,
+      },
+      order ?? animationOrder ?? null
+    );
+  } else {
+    tl.fromTo(
+      titleSplit.lines,
+      {
+        yPercent: 100,
+      },
+      {
+        yPercent: 0,
+        stagger: 0.05,
+      },
+      order ?? animationOrder ?? null
+    );
+  }
+};
+
+const figureAnimation = (figures: NodeListOf<Element>, tl: any, order?: string) => {
+  figures.forEach((figure) => {
+    gsap.set(figure, {
+      clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
+    });
+    const animationOrder = figure.getAttribute('data-animation-order');
+
+    tl.to(
+      figure,
+      {
+        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+      },
+      order ?? animationOrder ?? null
+    );
+  });
+};
+
+const paragraphsAnimation = (paragraphs: NodeListOf<Element>, tl: any, order?: string) => {
+  paragraphs.forEach((paragraph) => {
+    const animationOrder = paragraph.getAttribute('data-animation-order');
+    const paragraphSplit = new SplitText(paragraph, {
+      type: 'words,lines',
+      mask: 'lines',
+    });
+    // const animationOrder = paragraph.getAttribute('data-animation-order');
+
+    gsap.set(paragraphSplit.lines, {
+      overflow: 'hidden',
+    });
+    gsap.set(paragraphSplit.lines, {
+      yPercent: 100,
+    });
+    tl.to(
+      paragraphSplit.lines,
+      {
+        yPercent: 0,
+        stagger: 0.15,
+      },
+      order ?? animationOrder ?? null
+    );
+  });
+};
+
 export const dualImage = () => {
   const sections = document.querySelectorAll('[data-animation-general]');
-
+  const elems = document.getElementsByTagName('*');
   if (sections.length > 0) {
     sections.forEach((section) => {
       const mm = gsap.matchMedia();
+
       mm.add('(min-width: 768px)', () => {
         const tl = gsap.timeline({
           defaults: {
@@ -24,92 +119,29 @@ export const dualImage = () => {
         const links = section.querySelectorAll('a.button.is-link');
         const liItems = section.querySelectorAll('li');
         const otherLinks = section.querySelectorAll('a.sticky-details_link');
+        // let index = 0;
+        const indexOfTitle = Array.from(elems).indexOf(headerTitle as Element);
+        const indexOfFirstFigure = Array.from(elems).indexOf(figures[0] as Element);
+        const indexOfFirstParagraph = Array.from(elems).indexOf(paragraphs[0] as Element);
 
-        if (figures.length > 0) {
-          figures.forEach((figure) => {
-            gsap.set(figure, {
-              clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
-            });
-            const animationOrder = figure.getAttribute('data-animation-order');
-
-            tl.to(
-              figure,
-              {
-                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-                duration: 1,
-              },
-              animationOrder ?? 0
-            );
-          });
-        }
-
-        if (headerTitle) {
-          const titleSplit = new SplitText(headerTitle, {
-            type: 'words,lines',
-            mask: 'lines',
-          });
-          const parent = headerTitle.parentElement;
-          const isRotated = parent?.hasAttribute('data-90deg-text');
-
-          const animationOrder = headerTitle.getAttribute('data-animation-order');
-
-          gsap.set(titleSplit.lines, {
-            overflow: 'hidden',
-          });
-          if (isRotated) {
-            tl.fromTo(
-              titleSplit.lines,
-              {
-                xPercent: 100,
-              },
-              {
-                xPercent: 0,
-                duration: 1,
-                stagger: 0.05,
-              },
-              animationOrder ?? 0
-            );
+        if (indexOfFirstFigure > indexOfTitle) {
+          titleAnimation(headerTitle!, tl);
+          if (indexOfFirstFigure > indexOfFirstParagraph) {
+            paragraphsAnimation(paragraphs, tl, '-=70%');
+            figureAnimation(figures, tl, '-=40%');
           } else {
-            tl.fromTo(
-              titleSplit.lines,
-              {
-                yPercent: 100,
-              },
-              {
-                yPercent: 0,
-                duration: 1,
-                stagger: 0.05,
-              },
-              animationOrder ?? 0
-            );
+            figureAnimation(figures, tl, '-=50%');
+            paragraphsAnimation(paragraphs, tl, '-=50%');
           }
-        }
-
-        if (paragraphs.length > 0) {
-          paragraphs.forEach((paragraph) => {
-            const paragraphSplit = new SplitText(paragraph, {
-              type: 'words,lines',
-              mask: 'lines',
-            });
-            // const animationOrder = paragraph.getAttribute('data-animation-order');
-
-            gsap.set(paragraphSplit.lines, {
-              overflow: 'hidden',
-            });
-            gsap.set(paragraphSplit.lines, {
-              yPercent: 100,
-            });
-            tl.to(
-              paragraphSplit.lines,
-              {
-                yPercent: 0,
-                duration: 1,
-                stagger: 0.15,
-              },
-              '-=.75'
-              // animationOrder ?? 0
-            );
-          });
+        } else {
+          figureAnimation(figures, tl);
+          if (indexOfFirstParagraph > indexOfTitle) {
+            titleAnimation(headerTitle!, tl, '-=70%');
+            paragraphsAnimation(paragraphs, tl, '-=50%');
+          } else {
+            paragraphsAnimation(paragraphs, tl, '-=50%');
+            titleAnimation(headerTitle!, tl);
+          }
         }
 
         if (links.length > 0) {
@@ -243,7 +275,7 @@ export const dualImage = () => {
             });
             ScrollTrigger.create({
               trigger: figure,
-              start: 'top 50%',
+              start: 'top 80%',
               markers: false,
               animation: tl,
             });
@@ -294,7 +326,7 @@ export const dualImage = () => {
           }
           ScrollTrigger.create({
             trigger: headerTitle,
-            start: 'top 50%',
+            start: 'top 80%',
             markers: false,
             animation: tl,
           });
@@ -327,7 +359,7 @@ export const dualImage = () => {
             });
             ScrollTrigger.create({
               trigger: paragraph,
-              start: 'top 50%',
+              start: 'top 80%',
               markers: false,
               animation: tl,
             });
@@ -378,7 +410,7 @@ export const dualImage = () => {
             );
             ScrollTrigger.create({
               trigger: link,
-              start: 'top 50%',
+              start: 'top 80%',
               markers: false,
               animation: tl,
             });
@@ -412,7 +444,7 @@ export const dualImage = () => {
             );
             ScrollTrigger.create({
               trigger: li.parentElement,
-              start: 'top 50%',
+              start: 'top 80%',
               markers: false,
               animation: tl,
             });
@@ -457,7 +489,7 @@ export const dualImage = () => {
             );
             ScrollTrigger.create({
               trigger: otherLink,
-              start: 'top 50%',
+              start: 'top 80%',
               markers: false,
               animation: tl,
             });
