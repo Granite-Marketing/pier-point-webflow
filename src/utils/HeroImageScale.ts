@@ -23,13 +23,38 @@ export const heroImageAnimations = () => {
     const heroImages = document.querySelectorAll(
       '[hero-image-masker] .hero-mask_fig'
     ) as NodeListOf<HTMLElement>;
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let targetHolderX = 0;
+    let targetHolderY = 0;
+    let currentHolderX = 0;
+    let currentHolderY = 0;
+
     heroMask.addEventListener('mousemove', (e) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      const mouseX = e.clientX - window.innerWidth / 2;
+      const mouseY = e.clientY - window.innerHeight / 2;
+      targetX = mouseX;
+      targetY = mouseY;
+      targetHolderX = mouseX;
+      targetHolderY = mouseY;
+    });
+
+    // Animation loop for smooth movement with inertia
+    function animateImages() {
+      // Smooth interpolation towards target
+      currentX += (targetX - currentX) * 0.1;
+      currentY += (targetY - currentY) * 0.1;
+      currentHolderX += (targetHolderX - currentHolderX) * 0.1;
+      currentHolderY += (targetHolderY - currentHolderY) * 0.1;
+
       heroImages.forEach((img, index) => {
         const i = index + 1;
-        const distanceX = (mouseX / window.innerWidth) * (i * 2);
-        const distanceY = (mouseY / window.innerHeight) * (i * 2);
+        // const baseOffset = index * 5; // Add offset between images
+        const distanceX = (currentX / (window.innerWidth / 2)) * (i * 7);
+        const distanceY = (currentY / (window.innerHeight / 2)) * (i * 7);
         // img.style.transform = `translate(${-distanceX}%, ${-distanceY}%)`;
         gsap.to(img, {
           duration: 0,
@@ -37,16 +62,21 @@ export const heroImageAnimations = () => {
           transform: `translate(${-distanceX}%, ${-distanceY}%)`,
         });
       });
-      const distanceX = (mouseX / window.innerWidth) * 100;
-      const distanceY = (mouseY / window.innerHeight) * 50;
-      // newHeroImageHolder.style.cssText = `translateX(${-distanceX}px) translateY(${-distanceY}px)`;
+
+      // Animate main hero image holder with velocity
+      const distanceX = (currentHolderX / (window.innerWidth / 2)) * 100;
+      const distanceY = (currentHolderY / (window.innerHeight / 2)) * 50;
       gsap.to(newHeroImageHolder, {
         duration: 0,
         ease: 'power2.inOut',
         xPercent: -distanceX / 100,
         yPercent: -distanceY / 100,
       });
-    });
+
+      requestAnimationFrame(animateImages);
+    }
+
+    animateImages();
 
     const textTl = gsap.timeline({
       defaults: {
@@ -136,7 +166,7 @@ export const heroImageAnimations = () => {
       start: 'top top',
       // end: 'bottom bottom',
       // scrub: true,
-      markers: true,
+      markers: false,
       animation: textTl,
       toggleActions: 'play none play reverse',
     });
