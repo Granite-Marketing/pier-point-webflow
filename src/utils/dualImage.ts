@@ -125,22 +125,40 @@ export const dualImage = () => {
         const indexOfFirstParagraph = Array.from(elems).indexOf(paragraphs[0] as Element);
 
         if (indexOfFirstFigure > indexOfTitle) {
-          titleAnimation(headerTitle!, tl);
+          if (headerTitle) {
+            titleAnimation(headerTitle, tl);
+          }
           if (indexOfFirstFigure > indexOfFirstParagraph) {
-            paragraphsAnimation(paragraphs, tl, '-=70%');
-            figureAnimation(figures, tl, '-=40%');
+            if (paragraphs.length > 0) {
+              paragraphsAnimation(paragraphs, tl, '-=70%');
+            }
+            if (figures.length > 0) {
+              figureAnimation(figures, tl, '-=40%');
+            }
           } else {
-            figureAnimation(figures, tl, '-=50%');
-            paragraphsAnimation(paragraphs, tl, '-=50%');
+            if (figures.length > 0) {
+              figureAnimation(figures, tl, '-=50%');
+            }
+            if (paragraphs.length > 0) {
+              paragraphsAnimation(paragraphs, tl, '-=50%');
+            }
           }
         } else {
           figureAnimation(figures, tl);
           if (indexOfFirstParagraph > indexOfTitle) {
-            titleAnimation(headerTitle!, tl, '-=70%');
-            paragraphsAnimation(paragraphs, tl, '-=50%');
+            if (headerTitle) {
+              titleAnimation(headerTitle, tl, '-=70%');
+            }
+            if (paragraphs.length > 0) {
+              paragraphsAnimation(paragraphs, tl, '-=50%');
+            }
           } else {
-            paragraphsAnimation(paragraphs, tl, '-=50%');
-            titleAnimation(headerTitle!, tl);
+            if (paragraphs.length > 0) {
+              paragraphsAnimation(paragraphs, tl, '-=50%');
+            }
+            if (headerTitle) {
+              titleAnimation(headerTitle, tl);
+            }
           }
         }
 
