@@ -1,1 +1,1 @@
-{ "extends": ["@finsweet"] }
+// { "extends": ["@finsweet"] } // @abdul: can we keep this disabled @stephen:
