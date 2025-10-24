@@ -55,15 +55,14 @@ const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
 
 const figureAnimation = (figures: NodeListOf<Element>, tl: any, order?: string) => {
   figures.forEach((figure) => {
-    gsap.set(figure, {
-      clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
-    });
     const animationOrder = figure.getAttribute('data-animation-order');
-
-    tl.to(
+    tl.fromTo(
       figure,
       {
-        clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
+      },
+      {
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
       },
       order ?? animationOrder ?? null
     );
@@ -123,7 +122,7 @@ export const dualImage = () => {
         const indexOfFirstFigure = Array.from(elems).indexOf(figures[0] as Element);
         const indexOfFirstParagraph = Array.from(elems).indexOf(paragraphs[0] as Element);
 
-        if (indexOfFirstFigure > indexOfTitle) {
+        if (indexOfTitle >= 0 && indexOfTitle < indexOfFirstFigure) {
           if (headerTitle) {
             titleAnimation(headerTitle, tl);
           }
@@ -260,7 +259,7 @@ export const dualImage = () => {
         ScrollTrigger.create({
           trigger: section,
           start: 'top 50%',
-          markers: false,
+          markers: true,
           animation: tl,
         });
       });
