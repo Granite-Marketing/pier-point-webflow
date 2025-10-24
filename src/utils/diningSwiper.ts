@@ -1,9 +1,13 @@
 declare const SplitText: any;
 declare const gsap: any;
 declare const EmblaCarousel: any;
+declare const Autoplay: any;
+declare const Fade: any;
+import Fade from 'embla-carousel-fade';
+import Autoplay from 'embla-carousel-autoplay';
+
 type EmblaCarouselType = any; // need to fix those
 type _SplitText = any; // need to fix those
-
 type SplitsHolders = {
   numSplit: _SplitText | null;
   titleSplit: _SplitText | null;
@@ -22,6 +26,7 @@ class DiningSlider {
   options: object;
   textEmblaApi: EmblaCarouselType | null;
   imagesEmblaApi: EmblaCarouselType | null;
+  innerSliders: EmblaCarouselType[] | null;
   prevSlideSplits: SplitsHolders;
   nextSlideSplits: SplitsHolders;
   isAnimating: boolean;
@@ -38,6 +43,7 @@ class DiningSlider {
     this.options = { loop: true, duration: 0, watchDrag: false };
     this.textEmblaApi = null;
     this.imagesEmblaApi = null;
+    this.innerSliders = null;
     this.isAnimating = false;
     // this.prevSlideEl = null;
     // this.currentSlideEl = null;
@@ -73,6 +79,26 @@ class DiningSlider {
   initSliders() {
     this.textEmblaApi = EmblaCarousel(this.textSliderEl as HTMLElement, this.options);
     this.imagesEmblaApi = EmblaCarousel(this.imagesSliderEl as HTMLElement, this.options);
+    const innerSlidersEl = this.imagesSliderEl.querySelectorAll('.slider-2_card-images');
+    this.innerSliders = Array.from(innerSlidersEl).map((sliderEl: Element) =>
+      EmblaCarousel(
+        sliderEl,
+        {
+          loop: true,
+          // duration: 0,
+          watchDrag: false,
+          container: sliderEl,
+        },
+        [
+          Fade(),
+          Autoplay({
+            playOnInit: false,
+            delay: 3000,
+          }),
+        ]
+      )
+    );
+    this.innerSliders[0].plugins()?.autoplay.play();
   }
 
   prepareNextSlid(slide: Element, imagesSlide: Element) {
@@ -132,7 +158,7 @@ class DiningSlider {
       yPercent: 100,
     });
 
-    gsap.set(imagesSlide.querySelector('.slider-2_card-images-item'), {
+    gsap.set(imagesSlide.querySelector('.slider-2_card-images'), {
       clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
     });
   }
@@ -214,7 +240,7 @@ class DiningSlider {
           '-=1'
         )
         .fromTo(
-          imagesSlide.querySelector('.slider-2_card-images-item'),
+          imagesSlide.querySelector('.slider-2_card-images'),
           {
             clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
           },
@@ -237,10 +263,10 @@ class DiningSlider {
           ease: (i) => 1 - Math.pow(1 - i, 4),
         },
       });
-      // console.log(imagesSlide.querySelector('.slider-2_card-images-item'));
+      // console.log(imagesSlide.querySelector('.slider-2_card-images'));
 
       tl.fromTo(
-        imagesSlide.querySelector('.slider-2_card-images-item'),
+        imagesSlide.querySelector('.slider-2_card-images'),
         {
           clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
         },
@@ -292,6 +318,8 @@ class DiningSlider {
       const localNextIndex =
         this.currentIndex + 1 > this.textSlides!.length - 1 ? 0 : this.currentIndex + 1;
 
+      this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
+
       this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
       this.animateOutSlide(
         this.textSlides![this.currentIndex],
@@ -313,6 +341,7 @@ class DiningSlider {
       this.prevSlideSplits.pSplits = [];
       const localNextIndex =
         this.currentIndex - 1 < 0 ? this.textSlides!.length - 1 : this.currentIndex - 1;
+      this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
 
       this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
       this.animateOutSlide(
@@ -342,6 +371,8 @@ class DiningSlider {
         this.nextSlideSplits.titleSplit!.revert();
         this.nextSlideSplits.pSplits.forEach((pSplit) => pSplit.revert());
         this.isAnimating = false;
+        this.innerSliders![this.currentIndex]?.plugins()?.autoplay.play();
+        // this.animateInnerImages();
       });
     });
   }

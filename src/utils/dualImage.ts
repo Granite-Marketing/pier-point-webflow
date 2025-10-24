@@ -108,8 +108,6 @@ export const dualImage = () => {
             ease: 'power2.inOut',
           },
         });
-        //from: polygon(0 0, 100% 0, 100% 0, 0 0);
-        //to: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 
         const figures = section.querySelectorAll('figure');
         const headerTitle = section.querySelector('header > *:first-child');
@@ -259,7 +257,7 @@ export const dualImage = () => {
         ScrollTrigger.create({
           trigger: section,
           start: 'top 50%',
-          markers: true,
+          markers: false,
           animation: tl,
         });
       });
