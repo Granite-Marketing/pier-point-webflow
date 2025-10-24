@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.15
+
+### Patch Changes
+
+- 293be34: Ready for Client Review - 1
+
 ## 1.0.12
 
 ### Patch Changes
