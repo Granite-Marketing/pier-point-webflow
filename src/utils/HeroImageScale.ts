@@ -202,6 +202,47 @@ const introAnimation = () => {
   );
 };
 
+const headerAnimation = () => {
+  const header = document.querySelector('.header_component');
+  const cta = document.querySelector('.floating-cta');
+  const triggerSection = document.querySelector('.section_hero-home');
+
+  gsap.set(header, {
+    yPercent: -100,
+  });
+  gsap.set(cta, {
+    yPercent: 200,
+  });
+
+  const tl = gsap.timeline();
+  tl.to(
+    header,
+    {
+      yPercent: 0,
+      duration: 0.5,
+      ease: 'power2.inOut',
+    },
+    '0'
+  );
+  tl.to(
+    cta,
+    {
+      yPercent: 0,
+      duration: 0.5,
+      ease: 'power2.inOut',
+    },
+    '0'
+  );
+  ScrollTrigger.create({
+    trigger: triggerSection,
+    start: 'top top',
+    end: 'bottom bottom',
+    animation: tl,
+    toggleActions: 'play none none reverse',
+    markers: false,
+  });
+};
+
 export const heroImageAnimations = () => {
   const heroImage = document.querySelector('.hero-mask_fig:has(video)');
 
@@ -213,5 +254,6 @@ export const heroImageAnimations = () => {
     introAnimation();
     flipVideoAnimation();
     mouseMoveAnimation();
+    headerAnimation();
   }
 };
