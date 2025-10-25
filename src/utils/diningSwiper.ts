@@ -30,6 +30,10 @@ class DiningSlider {
   prevSlideSplits: SplitsHolders;
   nextSlideSplits: SplitsHolders;
   isAnimating: boolean;
+  isMobileDragging: boolean;
+  mobileDragStartX: number;
+  mobileDragStartY: number;
+  mobileDragDirection: 'left' | 'right' | null;
 
   constructor(textSliderEl: HTMLElement, imagesSliderEl: HTMLElement) {
     this.textSliderEl = textSliderEl;
@@ -45,6 +49,10 @@ class DiningSlider {
     this.imagesEmblaApi = null;
     this.innerSliders = null;
     this.isAnimating = false;
+    this.isMobileDragging = false;
+    this.mobileDragStartX = 0;
+    this.mobileDragStartY = 0;
+    this.mobileDragDirection = null;
     // this.prevSlideEl = null;
     // this.currentSlideEl = null;
     // this.nextSlideEl = null;
@@ -74,6 +82,7 @@ class DiningSlider {
     this.initSliders();
     this.initButtons();
     this.initEmblaEvents();
+    this.initMobileDrag();
   }
 
   initSliders() {
@@ -160,6 +169,55 @@ class DiningSlider {
 
     gsap.set(imagesSlide.querySelector('.slider-2_card-images'), {
       clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+    });
+  }
+
+  animateNextSlide() {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+    this.nextSlideSplits.pSplits = [];
+    this.prevSlideSplits.pSplits = [];
+    const localNextIndex =
+      this.currentIndex + 1 > this.textSlides!.length - 1 ? 0 : this.currentIndex + 1;
+
+    this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
+
+    this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
+    this.animateOutSlide(
+      this.textSlides![this.currentIndex],
+      this.imagesSlides![this.currentIndex]
+    ).then(() => {
+      if (this.currentIndex === this.textSlides!.length - 1) {
+        this.currentIndex = 0;
+      } else {
+        this.currentIndex += 1;
+      }
+      this.textEmblaApi?.scrollNext();
+      this.imagesEmblaApi?.scrollNext();
+    });
+  }
+
+  animatePrevSlide() {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+    this.nextSlideSplits.pSplits = [];
+    this.prevSlideSplits.pSplits = [];
+    const localNextIndex =
+      this.currentIndex - 1 < 0 ? this.textSlides!.length - 1 : this.currentIndex - 1;
+    this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
+
+    this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
+    this.animateOutSlide(
+      this.textSlides![this.currentIndex],
+      this.imagesSlides![this.currentIndex]
+    ).then(() => {
+      if (this.currentIndex === 0) {
+        this.currentIndex = this.textSlides!.length - 1;
+      } else {
+        this.currentIndex -= 1;
+      }
+      this.textEmblaApi?.scrollPrev();
+      this.imagesEmblaApi?.scrollPrev();
     });
   }
 
@@ -310,53 +368,8 @@ class DiningSlider {
   }
 
   initButtons() {
-    this.nextEl?.addEventListener('click', () => {
-      if (this.isAnimating) return;
-      this.isAnimating = true;
-      this.nextSlideSplits.pSplits = [];
-      this.prevSlideSplits.pSplits = [];
-      const localNextIndex =
-        this.currentIndex + 1 > this.textSlides!.length - 1 ? 0 : this.currentIndex + 1;
-
-      this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
-
-      this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
-      this.animateOutSlide(
-        this.textSlides![this.currentIndex],
-        this.imagesSlides![this.currentIndex]
-      ).then(() => {
-        if (this.currentIndex === this.textSlides!.length - 1) {
-          this.currentIndex = 0;
-        } else {
-          this.currentIndex += 1;
-        }
-        this.textEmblaApi?.scrollNext();
-        this.imagesEmblaApi?.scrollNext();
-      });
-    });
-    this.prevEl?.addEventListener('click', () => {
-      if (this.isAnimating) return;
-      this.isAnimating = true;
-      this.nextSlideSplits.pSplits = [];
-      this.prevSlideSplits.pSplits = [];
-      const localNextIndex =
-        this.currentIndex - 1 < 0 ? this.textSlides!.length - 1 : this.currentIndex - 1;
-      this.innerSliders![this.currentIndex]?.plugins()?.autoplay.stop();
-
-      this.prepareNextSlid(this.textSlides![localNextIndex], this.imagesSlides![localNextIndex]);
-      this.animateOutSlide(
-        this.textSlides![this.currentIndex],
-        this.imagesSlides![this.currentIndex]
-      ).then(() => {
-        if (this.currentIndex === 0) {
-          this.currentIndex = this.textSlides!.length - 1;
-        } else {
-          this.currentIndex -= 1;
-        }
-        this.textEmblaApi?.scrollPrev();
-        this.imagesEmblaApi?.scrollPrev();
-      });
-    });
+    this.nextEl?.addEventListener('click', () => this.animateNextSlide());
+    this.prevEl?.addEventListener('click', () => this.animatePrevSlide());
   }
   initEmblaEvents() {
     this.textEmblaApi?.on('select', () => {
@@ -374,6 +387,35 @@ class DiningSlider {
         this.innerSliders![this.currentIndex]?.plugins()?.autoplay.play();
         // this.animateInnerImages();
       });
+    });
+  }
+
+  initMobileDrag() {
+    this.textSliderEl.addEventListener('touchstart', (e) => {
+      this.isMobileDragging = true;
+      this.mobileDragStartX = e.changedTouches[0].clientX;
+      this.mobileDragStartY = e.changedTouches[0].clientY;
+    });
+    this.textSliderEl.addEventListener('touchend', (e) => {
+      this.isMobileDragging = false;
+      this.mobileDragDirection = null;
+      const mobileDragEndX = e.changedTouches[0].clientX;
+      const mobileDragEndY = e.changedTouches[0].clientY;
+      const mobileDragDistanceX = mobileDragEndX - this.mobileDragStartX;
+      const mobileDragDistanceY = mobileDragEndY - this.mobileDragStartY;
+      if (Math.abs(mobileDragDistanceX) > Math.abs(mobileDragDistanceY)) {
+        if (mobileDragDistanceX > 0) {
+          this.mobileDragDirection = 'left';
+        } else {
+          this.mobileDragDirection = 'right';
+        }
+      }
+
+      if (this.mobileDragDirection === 'left') {
+        this.animatePrevSlide();
+      } else {
+        this.animateNextSlide();
+      }
     });
   }
 }
