@@ -14,14 +14,13 @@ import { initMap } from '$utils/map';
 import { mapNeeds } from '$utils/mapNeeds';
 import { modals } from '$utils/modals';
 import { removeOrphans } from '$utils/removeOrphans';
-import { selectH2ForAnimation } from '$utils/selectH2ForAnimation';
 import { sortItems } from '$utils/sortItems';
+import { roomsCards } from '$utils/roomsCards';
 import { swiperSliders } from '$utils/swiperSliders';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('test');
-  selectH2ForAnimation();
   mapNeeds();
   sortItems();
   removeOrphans();
