@@ -3,24 +3,22 @@ declare const ScrollTrigger: any;
 declare const SplitText: any;
 
 const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
+  console.log(headerTitle);
+  gsap.set(headerTitle, {
+    textWrap: 'nowrap',
+  });
   const titleSplit = new SplitText(headerTitle, {
-    type: 'words,lines',
-    mask: 'lines',
+    type: 'words',
+    mask: 'words',
+    // reduceWhiteSpace: true,
   });
   const parent = headerTitle.parentElement;
   const isRotated = parent?.hasAttribute('data-90deg-text');
 
   const animationOrder = headerTitle.getAttribute('data-animation-order');
 
-  gsap.set(titleSplit.lines, {
-    overflow: 'hidden',
-  });
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 768px)', () => {
-    gsap.set(headerTitle, {
-      textWrap: 'nowrap',
-    });
-  });
+  mm.add('(min-width: 768px)', () => {});
   mm.add('(max-width: 767px)', () => {
     gsap.set(headerTitle, {
       textWrap: 'wrap',
@@ -28,25 +26,23 @@ const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
   });
   if (isRotated) {
     tl.fromTo(
-      titleSplit.lines,
+      titleSplit.words,
       {
         xPercent: 100,
       },
       {
         xPercent: 0,
-        stagger: 0.05,
       },
       order ?? animationOrder ?? null
     );
   } else {
     tl.fromTo(
-      titleSplit.lines,
+      titleSplit.words,
       {
         yPercent: 100,
       },
       {
         yPercent: 0,
-        stagger: 0.05,
       },
       order ?? animationOrder ?? null
     );
@@ -96,6 +92,10 @@ const paragraphsAnimation = (paragraphs: NodeListOf<Element>, tl: any, order?: s
 
 export const dualImage = () => {
   const sections = document.querySelectorAll('[data-animation-general]');
+  // const testSection = document.querySelector('.section_two-img-imba.is-2');
+  // const test = testSection?.querySelectorAll('header > *:first-child');
+  // console.log(test);
+
   const elems = document.getElementsByTagName('*');
   if (sections.length > 0) {
     sections.forEach((section) => {
@@ -110,19 +110,21 @@ export const dualImage = () => {
         });
 
         const figures = section.querySelectorAll('figure');
-        const headerTitle = section.querySelector('header > *:first-child');
+        const headerTitles = section.querySelectorAll('header > *:first-child');
         const paragraphs = section.querySelectorAll('p');
         const links = section.querySelectorAll('a.button.is-link');
         const liItems = section.querySelectorAll('li');
         const otherLinks = section.querySelectorAll('a.sticky-details_link');
         // let index = 0;
-        const indexOfTitle = Array.from(elems).indexOf(headerTitle as Element);
+        const indexOfTitle = Array.from(elems).indexOf(headerTitles[0] as Element);
         const indexOfFirstFigure = Array.from(elems).indexOf(figures[0] as Element);
         const indexOfFirstParagraph = Array.from(elems).indexOf(paragraphs[0] as Element);
 
         if (indexOfTitle >= 0 && indexOfTitle < indexOfFirstFigure) {
-          if (headerTitle) {
-            titleAnimation(headerTitle, tl);
+          if (headerTitles.length > 0) {
+            headerTitles.forEach((headerTitle) => {
+              titleAnimation(headerTitle, tl);
+            });
           }
           if (indexOfFirstFigure > indexOfFirstParagraph) {
             if (paragraphs.length > 0) {
@@ -142,8 +144,10 @@ export const dualImage = () => {
         } else {
           figureAnimation(figures, tl);
           if (indexOfFirstParagraph > indexOfTitle) {
-            if (headerTitle) {
-              titleAnimation(headerTitle, tl, '-=85%');
+            if (headerTitles.length > 0) {
+              headerTitles.forEach((headerTitle) => {
+                titleAnimation(headerTitle, tl, '-=85%');
+              });
             }
             if (paragraphs.length > 0) {
               paragraphsAnimation(paragraphs, tl, '-=60%');
@@ -152,8 +156,10 @@ export const dualImage = () => {
             if (paragraphs.length > 0) {
               paragraphsAnimation(paragraphs, tl, '-=50%');
             }
-            if (headerTitle) {
-              titleAnimation(headerTitle, tl);
+            if (headerTitles.length > 0) {
+              headerTitles.forEach((headerTitle) => {
+                titleAnimation(headerTitle, tl);
+              });
             }
           }
         }
