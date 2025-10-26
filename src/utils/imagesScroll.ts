@@ -30,7 +30,7 @@ export const imagesScroll = () => {
           );
         ScrollTrigger.create({
           trigger: section,
-          markers: true,
+          markers: false,
           pin: true,
           scrub: true,
           start: 'top top',
