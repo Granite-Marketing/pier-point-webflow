@@ -1,5 +1,6 @@
 declare const SplitText: any;
 declare const gsap: any;
+declare const ScrollTrigger: any;
 declare const EmblaCarousel: any;
 declare const Autoplay: any;
 declare const Fade: any;
@@ -368,8 +369,15 @@ class DiningSlider {
   async introAnimation() {
     await new Promise((resolve) => {
       this.prepareNextSlid(this.textSlides![0], this.imagesSlides![0]);
-      this.animateInSlide(this.textSlides![0], this.imagesSlides![0]).then(() => {
-        resolve(true);
+      ScrollTrigger.create({
+        trigger: this.textSliderEl,
+        start: 'top 50%',
+        markers: true,
+        onEnter: () => {
+          this.animateInSlide(this.textSlides![0], this.imagesSlides![0]).then(() => {
+            resolve(true);
+          });
+        },
       });
     });
   }
