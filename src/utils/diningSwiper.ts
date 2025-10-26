@@ -372,7 +372,7 @@ class DiningSlider {
       ScrollTrigger.create({
         trigger: this.textSliderEl,
         start: 'top 50%',
-        markers: true,
+        markers: false,
         onEnter: () => {
           this.animateInSlide(this.textSlides![0], this.imagesSlides![0]).then(() => {
             resolve(true);
