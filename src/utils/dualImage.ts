@@ -53,8 +53,8 @@ const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
   }
 };
 
-const figureAnimation = (figures: NodeListOf<Element>, tl: any, order?: string) => {
-  figures.forEach((figure) => {
+const figureAnimation = (figures: NodeListOf<Element>, tl: any, order?: boolean) => {
+  figures.forEach((figure, index) => {
     const animationOrder = figure.getAttribute('data-animation-order');
     tl.fromTo(
       figure,
@@ -64,7 +64,7 @@ const figureAnimation = (figures: NodeListOf<Element>, tl: any, order?: string) 
       {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
       },
-      order ?? animationOrder ?? null
+      order ? '-=75%' : animationOrder ?? `-=${index * 0.75}`
     );
   });
 };
@@ -129,11 +129,11 @@ export const dualImage = () => {
               paragraphsAnimation(paragraphs, tl, '-=70%');
             }
             if (figures.length > 0) {
-              figureAnimation(figures, tl, '-=40%');
+              figureAnimation(figures, tl, true);
             }
           } else {
             if (figures.length > 0) {
-              figureAnimation(figures, tl, '-=50%');
+              figureAnimation(figures, tl, true);
             }
             if (paragraphs.length > 0) {
               paragraphsAnimation(paragraphs, tl, '-=50%');
@@ -143,10 +143,10 @@ export const dualImage = () => {
           figureAnimation(figures, tl);
           if (indexOfFirstParagraph > indexOfTitle) {
             if (headerTitle) {
-              titleAnimation(headerTitle, tl, '-=70%');
+              titleAnimation(headerTitle, tl, '-=85%');
             }
             if (paragraphs.length > 0) {
-              paragraphsAnimation(paragraphs, tl, '-=50%');
+              paragraphsAnimation(paragraphs, tl, '-=60%');
             }
           } else {
             if (paragraphs.length > 0) {
