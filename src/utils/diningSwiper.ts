@@ -81,8 +81,11 @@ class DiningSlider {
 
     this.initSliders();
     this.initButtons();
-    this.initEmblaEvents();
-    this.initMobileDrag();
+    this.introAnimation().then(() => {
+      this.innerSliders![0]?.plugins()?.autoplay.play();
+      this.initEmblaEvents();
+      this.initMobileDrag();
+    });
   }
 
   initSliders() {
@@ -107,7 +110,6 @@ class DiningSlider {
         ]
       )
     );
-    this.innerSliders[0].plugins()?.autoplay.play();
   }
 
   prepareNextSlid(slide: Element, imagesSlide: Element) {
@@ -153,15 +155,12 @@ class DiningSlider {
 
     gsap.set(numSplit.chars, {
       yPercent: 100,
-      stagger: 0.025,
     });
     gsap.set(titleSplit.chars, {
       yPercent: 100,
-      stagger: 0.025,
     });
     gsap.set(pSplitsLines, {
       yPercent: 100,
-      stagger: 0.05,
     });
     gsap.set(slide.querySelector('.slider-2_card-footer a'), {
       yPercent: 100,
@@ -364,6 +363,14 @@ class DiningSlider {
           },
           '-=1'
         );
+    });
+  }
+  async introAnimation() {
+    await new Promise((resolve) => {
+      this.prepareNextSlid(this.textSlides![0], this.imagesSlides![0]);
+      this.animateInSlide(this.textSlides![0], this.imagesSlides![0]).then(() => {
+        resolve(true);
+      });
     });
   }
 
