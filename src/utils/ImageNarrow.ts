@@ -6,32 +6,34 @@ export const imageNarrow = () => {
   const imageNarrow = document.querySelector('.hero_fig');
   const image = imageNarrow?.querySelector('img');
   const tl = gsap.timeline();
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 768px)', () => {
+    gsap.set(imageNarrow, {
+      overflow: 'hidden',
+    });
+    tl.to(
+      imageNarrow,
+      {
+        scale: 0.9,
+      },
+      '0'
+    );
+    tl.to(
+      image,
+      {
+        y: 100,
+        scale: 1.2,
+      },
+      '0'
+    );
 
-  gsap.set(imageNarrow, {
-    overflow: 'hidden',
-  });
-  tl.to(
-    imageNarrow,
-    {
-      scale: 0.9,
-    },
-    '0'
-  );
-  tl.to(
-    image,
-    {
-      y: 100,
-      scale: 1.2,
-    },
-    '0'
-  );
-
-  ScrollTrigger.create({
-    trigger: imageNarrow,
-    start: 'top 40%',
-    end: 'bottom center',
-    scrub: true,
-    markers: false,
-    animation: tl,
+    ScrollTrigger.create({
+      trigger: imageNarrow,
+      start: 'top 40%',
+      end: 'bottom center',
+      scrub: true,
+      markers: false,
+      animation: tl,
+    });
   });
 };
