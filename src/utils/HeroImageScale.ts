@@ -110,7 +110,7 @@ const flipVideoAnimation = () => {
       },
       {
         opacity: 1,
-        duration: 0.5,
+        duration: 1,
       }
     )
     .fromTo(
@@ -121,7 +121,7 @@ const flipVideoAnimation = () => {
       {
         yPercent: 0,
       },
-      '-=.25'
+      '-=.5'
     )
     .fromTo(
       desSplit.lines,
@@ -160,7 +160,7 @@ const flipVideoAnimation = () => {
   });
   ScrollTrigger.create({
     trigger: newHeroImageHolder,
-    start: 'top top',
+    start: 'top 20%',
     markers: false,
     animation: textTl,
     toggleActions: 'play none play reverse',
