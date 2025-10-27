@@ -21,7 +21,7 @@ export const imagesScroll = () => {
         ).to(
           images,
           {
-            y: `-${images.length * 100}%`,
+            y: `-${images.length * 50}%`,
             ease: 'none',
           },
           '0'
@@ -32,7 +32,7 @@ export const imagesScroll = () => {
           pin: true,
           scrub: true,
           start: 'top top',
-          end: `+=${images.length * 75}%`,
+          end: `+=${images.length * 50}%`,
           animation: tl,
         });
         ScrollTrigger.create({
