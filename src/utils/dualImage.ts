@@ -3,7 +3,6 @@ declare const ScrollTrigger: any;
 declare const SplitText: any;
 
 const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
-  console.log(headerTitle);
   gsap.set(headerTitle, {
     textWrap: 'nowrap',
   });
@@ -18,7 +17,6 @@ const titleAnimation = (headerTitle: Element, tl: any, order?: string) => {
   const animationOrder = headerTitle.getAttribute('data-animation-order');
 
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 768px)', () => {});
   mm.add('(max-width: 767px)', () => {
     gsap.set(headerTitle, {
       textWrap: 'wrap',
@@ -269,6 +267,7 @@ export const dualImage = () => {
       });
 
       mm.add('(max-width: 767px)', () => {
+        const duration = 0.5;
         const figures = section.querySelectorAll('figure');
         const headerTitle = section.querySelector('header > *:first-child');
         const paragraphs = section.querySelectorAll('p');
@@ -280,7 +279,7 @@ export const dualImage = () => {
           figures.forEach((figure) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1,
+                duration: duration,
                 ease: 'power2.inOut',
               },
             });
@@ -290,7 +289,6 @@ export const dualImage = () => {
 
             tl.to(figure, {
               clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-              duration: 1,
             });
             ScrollTrigger.create({
               trigger: figure,
@@ -304,7 +302,7 @@ export const dualImage = () => {
         if (headerTitle) {
           const tl = gsap.timeline({
             defaults: {
-              duration: 1,
+              duration: duration,
               ease: 'power2.inOut',
             },
           });
@@ -326,7 +324,6 @@ export const dualImage = () => {
               },
               {
                 xPercent: 0,
-                duration: 1,
                 stagger: 0.05,
               }
             );
@@ -338,7 +335,6 @@ export const dualImage = () => {
               },
               {
                 yPercent: 0,
-                duration: 1,
                 stagger: 0.05,
               }
             );
@@ -355,7 +351,7 @@ export const dualImage = () => {
           paragraphs.forEach((paragraph) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1,
+                duration: duration,
                 ease: 'power2.inOut',
               },
             });
@@ -372,7 +368,6 @@ export const dualImage = () => {
             });
             tl.to(paragraphSplit.lines, {
               yPercent: 0,
-              duration: 1,
               stagger: 0.01,
             });
             ScrollTrigger.create({
@@ -388,7 +383,7 @@ export const dualImage = () => {
           links.forEach((link) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1,
+                duration: duration,
                 ease: 'power2.inOut',
               },
             });
@@ -436,7 +431,7 @@ export const dualImage = () => {
         if (liItems.length > 0) {
           const tl = gsap.timeline({
             defaults: {
-              duration: 1,
+              duration: duration,
               ease: 'power2.inOut',
             },
           });
@@ -471,7 +466,7 @@ export const dualImage = () => {
           otherLinks.forEach((otherLink) => {
             const tl = gsap.timeline({
               defaults: {
-                duration: 1,
+                duration: duration,
                 ease: 'power2.inOut',
               },
             });
