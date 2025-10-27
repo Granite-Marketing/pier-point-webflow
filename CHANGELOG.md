@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.22
+
+### Patch Changes
+
+- fb65313: For review Oct 28
+
 ## 1.0.15
 
 ### Patch Changes
