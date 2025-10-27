@@ -418,18 +418,27 @@ class DiningSlider {
       const mobileDragEndY = e.changedTouches[0].clientY;
       const mobileDragDistanceX = mobileDragEndX - this.mobileDragStartX;
       const mobileDragDistanceY = mobileDragEndY - this.mobileDragStartY;
-      if (Math.abs(mobileDragDistanceX) > Math.abs(mobileDragDistanceY)) {
+
+      const dragDistance = Math.sqrt(
+        Math.pow(mobileDragDistanceX, 2) + Math.pow(mobileDragDistanceY, 2)
+      );
+      const minDragThreshold = 50;
+
+      if (
+        dragDistance > minDragThreshold &&
+        Math.abs(mobileDragDistanceX) > Math.abs(mobileDragDistanceY)
+      ) {
         if (mobileDragDistanceX > 0) {
           this.mobileDragDirection = 'left';
         } else {
           this.mobileDragDirection = 'right';
         }
-      }
 
-      if (this.mobileDragDirection === 'left') {
-        this.animatePrevSlide();
-      } else {
-        this.animateNextSlide();
+        if (this.mobileDragDirection === 'left') {
+          this.animatePrevSlide();
+        } else {
+          this.animateNextSlide();
+        }
       }
     });
   }
