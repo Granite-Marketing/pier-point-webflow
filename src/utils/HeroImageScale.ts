@@ -158,36 +158,79 @@ const flipVideoAnimation = () => {
       border: '0',
     }),
   });
-  ScrollTrigger.create({
-    trigger: newHeroImageHolder,
-    start: 'top 20%',
-    markers: false,
-    animation: textTl,
-    toggleActions: 'play none play reverse',
+  mm.add('(min-width: 768px)', () => {
+    ScrollTrigger.create({
+      trigger: newHeroImageHolder,
+      start: 'top 20%',
+      markers: false,
+      animation: textTl,
+      toggleActions: 'play none play reverse',
+    });
+  });
+  mm.add('(max-width: 767px)', () => {
+    ScrollTrigger.create({
+      trigger: newHeroImageHolder,
+      start: 'top 40%',
+      markers: false,
+      animation: textTl,
+      toggleActions: 'play none play reverse',
+    });
   });
 };
 
 const introAnimation = () => {
   const svg = document.querySelector('.hero-mask_logo');
+  const mobSvg = document.querySelector('.header_logo.mob');
   const images = document.querySelectorAll('.hero-mask_fig-wrap .hero-mask_fig');
-  const tl = gsap.timeline();
-  if (!svg || !images) return;
+  const scrollTexts = document.querySelectorAll('.hero-mask_footer');
 
-  gsap.set(svg, {
+  const tl = gsap.timeline();
+  // if (!svg || !images) return;
+
+  const scrollTextLines = Array.from(scrollTexts).map(
+    (scrollText) =>
+      new SplitText(scrollText, {
+        type: 'lines',
+        mask: 'lines',
+      }).lines
+  );
+
+  const mm = gsap.matchMedia();
+
+  gsap.set([svg, mobSvg], {
     overflow: 'hidden',
   });
+
+  mm.add('(min-width: 768px)', () => {
+    tl.fromTo(
+      svg?.querySelectorAll('path'),
+      {
+        yPercent: 100,
+      },
+      {
+        yPercent: 0,
+        delay: 0.5,
+        duration: 1,
+        ease: 'expo.out',
+      }
+    );
+  });
+  mm.add('(max-width: 767px)', () => {
+    tl.fromTo(
+      mobSvg?.querySelectorAll('path'),
+      {
+        yPercent: 250,
+      },
+      {
+        yPercent: 0,
+        delay: 0.5,
+        // duration: 1,
+        stagger: 0.05,
+        ease: 'expo.out',
+      }
+    );
+  });
   tl.fromTo(
-    svg?.querySelectorAll('path'),
-    {
-      yPercent: 100,
-    },
-    {
-      yPercent: 0,
-      delay: 0.5,
-      duration: 1,
-      ease: 'expo.out',
-    }
-  ).fromTo(
     images,
     {
       clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
@@ -199,6 +242,15 @@ const introAnimation = () => {
       ease: 'expo.out',
     },
     '-=.5'
+  ).fromTo(
+    scrollTextLines,
+    {
+      yPercent: 100,
+    },
+    {
+      yPercent: 0,
+    },
+    '-=.5'
   );
 };
 
@@ -207,25 +259,28 @@ const headerAnimation = () => {
   const cta = document.querySelector('.floating-cta');
   const triggerSection = document.querySelector('.section_hero-home');
 
-  gsap.set(header, {
-    yPercent: -100,
-  });
-  gsap.set(cta, {
-    yPercent: 200,
-  });
-
   const tl = gsap.timeline();
-  tl.to(
-    header,
-    {
-      yPercent: 0,
-      duration: 0.5,
-      ease: 'power2.inOut',
-    },
-    '0'
-  );
-  tl.to(
+  const mm = gsap.matchMedia();
+
+  mm.add('(min-width: 768px)', () => {
+    tl.fromTo(
+      header,
+      {
+        yPercent: -100,
+      },
+      {
+        yPercent: 0,
+        duration: 0.5,
+        ease: 'power2.inOut',
+      },
+      '0'
+    );
+  });
+  tl.fromTo(
     cta,
+    {
+      yPercent: 200,
+    },
     {
       yPercent: 0,
       duration: 0.5,
