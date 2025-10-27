@@ -36,7 +36,7 @@ window.Webflow.push(() => {
   dualImage();
   roomsCards();
   horizontalScroll();
-  // imagesScroll();
+  imagesScroll();
   imageNarrow();
   colorScroll();
 
