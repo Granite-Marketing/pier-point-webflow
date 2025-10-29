@@ -268,13 +268,13 @@ export const dualImage = () => {
 
       mm.add('(max-width: 767px)', () => {
         const duration = 0.5;
+        const ease = 'power2.inOut';
         const figures = section.querySelectorAll('figure');
         const headerTitle = section.querySelector('header > *:first-child');
         const paragraphs = section.querySelectorAll('p');
         const links = section.querySelectorAll('a.button.is-link');
         const liItems = section.querySelectorAll('li');
         const otherLinks = section.querySelectorAll('a.sticky-details_link');
-
         if (figures.length > 0) {
           figures.forEach((figure) => {
             const tl = gsap.timeline({
@@ -303,7 +303,7 @@ export const dualImage = () => {
           const tl = gsap.timeline({
             defaults: {
               duration: duration,
-              ease: 'power2.inOut',
+              ease: ease,
             },
           });
           const titleSplit = new SplitText(headerTitle, {
@@ -352,7 +352,7 @@ export const dualImage = () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: duration,
-                ease: 'power2.inOut',
+                ease: ease,
               },
             });
             const paragraphSplit = new SplitText(paragraph, {
@@ -384,7 +384,7 @@ export const dualImage = () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: duration,
-                ease: 'power2.inOut',
+                ease: ease,
               },
             });
             const linkSplit = new SplitText(link.querySelector('div'), {
@@ -432,7 +432,7 @@ export const dualImage = () => {
           const tl = gsap.timeline({
             defaults: {
               duration: duration,
-              ease: 'power2.inOut',
+              ease: ease,
             },
           });
           liItems.forEach((li) => {
@@ -467,7 +467,7 @@ export const dualImage = () => {
             const tl = gsap.timeline({
               defaults: {
                 duration: duration,
-                ease: 'power2.inOut',
+                ease: ease,
               },
             });
             const otherLinkSplit = new SplitText(otherLink.querySelector('div'), {
