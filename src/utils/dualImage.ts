@@ -267,7 +267,7 @@ export const dualImage = () => {
       });
 
       mm.add('(max-width: 767px)', () => {
-        const duration = 0.5;
+        const duration = 0.75;
         const ease = 'power2.inOut';
         const figures = section.querySelectorAll('figure');
         const headerTitle = section.querySelector('header > *:first-child');
