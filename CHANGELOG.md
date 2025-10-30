@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.24
+
+### Patch Changes
+
+- 86cab30: horizontal scroll nav colour change
+
 ## 1.0.22
 
 ### Patch Changes
