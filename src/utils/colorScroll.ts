@@ -38,26 +38,13 @@ export const colorScroll = () => {
 
     const triggerElements = document.querySelectorAll('section, footer.footer, [color-mode]');
     triggerElements.forEach((element, index) => {
+      if (element.hasAttribute('color-mode-ignore')) return;
+
       let triggerElement = element;
       let startSetting = `clamp(top ${offsetSetting}%)`;
 
       let endSetting = `clamp(bottom ${offsetSetting}%)`;
       if (index === triggerElements.length - 1) endSetting = `bottom ${offsetSetting}%`;
-
-      if (element.classList.contains('section_h-scroll')) {
-        return;
-      }
-      if (
-        element.classList.contains('section_img-mosaic') &&
-        element.classList.contains('is-transition')
-      ) {
-        const hori = element.previousElementSibling;
-        const { width } = hori.getBoundingClientRect();
-        const { height } = element.getBoundingClientRect();
-        startSetting = `top ${width}px`;
-        endSetting = `top ${width + height}px`;
-        triggerElement = hori;
-      } else if (element.hasAttribute('color-mode-ignore')) return;
 
       let modeIndex = 1;
       if (element.hasAttribute('color-mode')) {
@@ -106,4 +93,7 @@ export const colorScroll = () => {
         );
     }, 15);
   }
+
+  window.COLOR_THEMES = colorThemes;
+  console.log('COLOR_THEMES set:', window.COLOR_THEMES);
 };

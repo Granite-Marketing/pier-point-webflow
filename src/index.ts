@@ -17,6 +17,7 @@ import { removeOrphans } from '$utils/removeOrphans';
 import { sortItems } from '$utils/sortItems';
 import { roomsCards } from '$utils/roomsCards';
 import { swiperSliders } from '$utils/swiperSliders';
+import { colorScrollForHScroll } from '$utils/colorScrollForHScroll';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
@@ -39,6 +40,7 @@ window.Webflow.push(() => {
   imagesScroll();
   imageNarrow();
   colorScroll();
+  colorScrollForHScroll();
 
   setTimeout(() => {
     initMap();
