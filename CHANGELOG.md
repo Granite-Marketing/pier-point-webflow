@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.25
+
+### Patch Changes
+
+- 9a69573: change mobile easing to 0.5 and ease out
+
 ## 1.0.24
 
 ### Patch Changes
