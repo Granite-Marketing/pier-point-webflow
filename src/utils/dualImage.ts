@@ -102,8 +102,8 @@ export const dualImage = () => {
       mm.add('(min-width: 768px)', () => {
         const tl = gsap.timeline({
           defaults: {
-            duration: 0.75,
-            ease: 'power2.out',
+            duration: 1,
+            ease: 'power2.inOut',
           },
         });
 
@@ -268,7 +268,7 @@ export const dualImage = () => {
 
       mm.add('(max-width: 767px)', () => {
         const duration = 0.5;
-        const ease = 'power2.out';
+        const ease = 'ease.out';
         const figures = section.querySelectorAll('figure');
         const headerTitle = section.querySelector('header > *:first-child');
         const paragraphs = section.querySelectorAll('p');
