@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.27
+
+### Patch Changes
+
+- b365e44: scrolltrig refresh
+
 ## 1.0.25
 
 ### Patch Changes
