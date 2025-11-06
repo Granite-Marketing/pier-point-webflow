@@ -21,7 +21,7 @@ import { colorScrollForHScroll } from '$utils/colorScrollForHScroll';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log('test');
+  // console.log('test');
   mapNeeds();
   sortItems();
   removeOrphans();

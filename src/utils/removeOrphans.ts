@@ -4,7 +4,7 @@ function preventOrphans(selector) {
   elements.forEach((element) => {
     if (element.hasAttribute('ignore-orphan')) return;
     if (!element.textContent) return;
-    if (element.children.length) return console.log(element, 'has children, skipping');
+    if (element.children.length) return; // console.log(element, 'has children, skipping');
 
     const textContent = element.textContent;
     const words = textContent.split(' ');
