@@ -92,7 +92,7 @@ export const dualImage = () => {
   const sections = document.querySelectorAll('[data-animation-general]');
   // const testSection = document.querySelector('.section_two-img-imba.is-2');
   // const test = testSection?.querySelectorAll('header > *:first-child');
-  // console.log(test);
+  //  // console.log(test);
 
   const elems = document.getElementsByTagName('*');
   if (sections.length > 0) {

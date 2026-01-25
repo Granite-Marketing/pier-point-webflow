@@ -16,6 +16,23 @@ export const gsapSmoothScroll = () => {
   });
 
   gsap.ticker.lagSmoothing(0);
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      console.log('load -> refresh');
+      ScrollTrigger.refresh();
+    }, 5000);
+  });
+  // fallback in case load missed
+  setTimeout(() => {
+    console.log('refresh');
+    ScrollTrigger.refresh();
+  }, 5000);
+  // last resort
+  setTimeout(() => {
+    console.log('last refresh');
+    ScrollTrigger.refresh();
+  }, 15000);
 };
 
 export const stopSmoothScroll = () => {

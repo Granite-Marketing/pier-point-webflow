@@ -32,10 +32,10 @@ const checkElementOverlap = () => {
     const targetRect = target.getBoundingClientRect();
 
     if (isIntersecting(headerRect, targetRect)) {
-      console.log('.header is overlapping .section_img-mosaic.is-transition');
+      // console.log('.header is overlapping .section_img-mosaic.is-transition');
       applyCSSVariablesToBody(window.COLOR_THEMES[1]);
     } else {
-      console.log('.header is NOT overlapping .section_img-mosaic.is-transition');
+      // console.log('.header is NOT overlapping .section_img-mosaic.is-transition');
       applyCSSVariablesToBody(window.COLOR_THEMES[0]);
     }
   }
@@ -68,10 +68,10 @@ const colorScrollForHScroll = () => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          console.log('.h-scroll_transition-wrap-wrap is in view — activating overlap check');
+          // console.log('.h-scroll_transition-wrap-wrap is in view — activating overlap check');
           checkElementOverlap();
         } else {
-          console.log('.h-scroll_transition-wrap-wrap is out of view — disabling overlap check');
+          // console.log('.h-scroll_transition-wrap-wrap is out of view — disabling overlap check');
           if (typeof window.__removeOverlapListeners === 'function') {
             window.__removeOverlapListeners();
           }

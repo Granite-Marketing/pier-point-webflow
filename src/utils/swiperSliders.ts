@@ -53,7 +53,7 @@ export const swiperSliders = () => {
           crossFade: true,
         },
         spaceBetween: 0,
-        slidersPerView: 'auto',
+        slidesPerView: 'auto',
         autoplay: {
           delay: 1000,
           disableOnInteraction: false,
@@ -81,7 +81,7 @@ export const swiperSliders = () => {
         fadeEffect: {
           crossFade: true,
         },
-        slidersPerView: 'auto',
+        slidesPerView: 'auto',
         grabCursor: false,
         watchSlidesProgress: false,
         disableOnInteraction: false,

@@ -95,5 +95,5 @@ export const colorScroll = () => {
   }
 
   window.COLOR_THEMES = colorThemes;
-  console.log('COLOR_THEMES set:', window.COLOR_THEMES);
+  // console.log('COLOR_THEMES set:', window.COLOR_THEMES);
 };

@@ -1,5 +1,17 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.28
+
+### Patch Changes
+
+- 9fffe06: header target change to correct nav width
+
+## 1.0.27
+
+### Patch Changes
+
+- b365e44: scrolltrig refresh
+
 ## 1.0.25
 
 ### Patch Changes

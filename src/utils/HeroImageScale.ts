@@ -255,7 +255,7 @@ const introAnimation = () => {
 };
 
 const headerAnimation = () => {
-  const header = document.querySelector('.header_component');
+  const header = document.querySelector('.header_bar');
   const cta = document.querySelector('.floating-cta');
   const triggerSection = document.querySelector('.section_hero-home');
 

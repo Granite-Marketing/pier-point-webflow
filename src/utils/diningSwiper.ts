@@ -321,7 +321,7 @@ class DiningSlider {
           ease: (i) => 1 - Math.pow(1 - i, 4),
         },
       });
-      // console.log(imagesSlide.querySelector('.slider-2_card-images'));
+      //  // console.log(imagesSlide.querySelector('.slider-2_card-images'));
 
       tl.fromTo(
         imagesSlide.querySelector('.slider-2_card-images'),
