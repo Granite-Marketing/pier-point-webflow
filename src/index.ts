@@ -6,7 +6,7 @@ import { floatingMenu } from '$utils/floatingMenu';
 import { fsCmsFilter } from '$utils/fsCmsFilter';
 import { gsapBasicAnimations } from '$utils/gsapBasicAnimations';
 import { gsapSmoothScroll } from '$utils/gsapSmoothScroll';
-import { heroImageAnimations } from '$utils/HeroImageScale';
+import { heroImageAnimations, setupHeroIntro } from '$utils/HeroImageScale';
 import { horizontalScroll } from '$utils/horizontalScroll';
 import { imageNarrow } from '$utils/ImageNarrow';
 import { imagesScroll } from '$utils/imagesScroll';
@@ -18,10 +18,16 @@ import { sortItems } from '$utils/sortItems';
 import { roomsCards } from '$utils/roomsCards';
 import { swiperSliders } from '$utils/swiperSliders';
 import { colorScrollForHScroll } from '$utils/colorScrollForHScroll';
+import { intro } from '$utils/intro';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
   console.log('test');
+  setupHeroIntro();
+  intro().then(() => {
+    console.log('Intro animation complete');
+    heroImageAnimations();
+  });
   mapNeeds();
   sortItems();
   removeOrphans();
@@ -33,7 +39,6 @@ window.Webflow.push(() => {
   swiperSliders();
   diningSlider();
   modals();
-  heroImageAnimations();
   dualImage();
   roomsCards();
   horizontalScroll();

@@ -298,6 +298,55 @@ const headerAnimation = () => {
   });
 };
 
+export const setupHeroIntro = () => {
+  const svg = document.querySelector('.hero-mask_logo');
+  const mobSvg = document.querySelector('.header_logo.mob');
+  const images = document.querySelectorAll('.hero-mask_fig-wrap .hero-mask_fig');
+  const scrollTexts = document.querySelectorAll('.hero-mask_footer');
+
+  const header = document.querySelector('.header_component');
+  const cta = document.querySelector('.floating-cta');
+
+  const mm = gsap.matchMedia();
+
+  const scrollTextLines = Array.from(scrollTexts).map(
+    (scrollText) =>
+      new SplitText(scrollText, {
+        type: 'lines',
+        mask: 'lines',
+      }).lines
+  );
+
+  gsap.set([svg, mobSvg], {
+    overflow: 'hidden',
+  });
+
+  mm.add('(min-width: 768px)', () => {
+    gsap.set(svg?.querySelectorAll('path'), {
+      yPercent: 100,
+    });
+    gsap.set(header, {
+      yPercent: -100,
+    });
+  });
+  mm.add('(max-width: 767px)', () => {
+    gsap.set(mobSvg?.querySelectorAll('path'), {
+      yPercent: 250,
+    });
+  });
+
+  gsap.set(images, {
+    clipPath: 'polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)',
+  });
+  gsap.set(scrollTextLines, {
+    yPercent: 100,
+  });
+
+  gsap.set(cta, {
+    yPercent: 200,
+  });
+};
+
 export const heroImageAnimations = () => {
   const heroImage = document.querySelector('.hero-mask_fig:has(video)');
 
