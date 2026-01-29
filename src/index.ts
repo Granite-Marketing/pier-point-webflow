@@ -25,7 +25,6 @@ window.Webflow.push(() => {
   console.log('test');
   setupHeroIntro();
   intro().then(() => {
-    console.log('Intro animation complete');
     heroImageAnimations();
   });
   mapNeeds();

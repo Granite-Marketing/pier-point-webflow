@@ -305,6 +305,8 @@ export const setupHeroIntro = () => {
   const scrollTexts = document.querySelectorAll('.hero-mask_footer');
 
   const header = document.querySelector('.header_component');
+  const headerBar = document.querySelector('.header_bar');
+
   const cta = document.querySelector('.floating-cta');
 
   const mm = gsap.matchMedia();
@@ -325,7 +327,7 @@ export const setupHeroIntro = () => {
     gsap.set(svg?.querySelectorAll('path'), {
       yPercent: 100,
     });
-    gsap.set(header, {
+    gsap.set(headerBar, {
       yPercent: -100,
     });
   });
