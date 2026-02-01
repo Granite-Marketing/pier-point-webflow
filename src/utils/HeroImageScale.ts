@@ -104,7 +104,7 @@ const flipVideoAnimation = () => {
 
   textTl
     .fromTo(
-      newHeroImageHolder.querySelector('.u-overlay'),
+      heroImage?.querySelector('.u-overlay'),
       {
         opacity: 0,
       },
