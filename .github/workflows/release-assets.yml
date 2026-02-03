@@ -1,0 +1,41 @@
+name: Build and Release Assets
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Upload dist files to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/index.js
+            dist/index.js.map
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
