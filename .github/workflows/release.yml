@@ -8,6 +8,51 @@ on:
 
 jobs:
   release:
-    uses: Granite-Marketing/workflow-release/.github/workflows/release.yml@main
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm exec changeset version
+          commit: "chore: version packages"
+          title: "chore: version packages"
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and upload assets if published
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Build the project
+          pnpm run build
+          
+          # Get the published version
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          echo "Uploading assets to release $TAG"
+          
+          # Upload dist files to the release
+          gh release upload "$TAG" dist/index.js dist/index.js.map --clobber || echo "Release not found yet, will be handled by release-assets.yml"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

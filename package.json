@@ -31,7 +31,6 @@
     "format": "prettier --write ./src",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "release": "changeset publish",
     "update": "pnpm update -i -L -r"
   },
   "devDependencies": {
