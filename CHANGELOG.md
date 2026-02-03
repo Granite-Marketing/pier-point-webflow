@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.29
+
+### Patch Changes
+
+- 3eb0957: intro animation and overlay fix
+
 ## 1.0.28
 
 ### Patch Changes
