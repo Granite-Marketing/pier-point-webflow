@@ -12,6 +12,9 @@ const mouseMoveAnimation = () => {
     '.section_hero-home .hero-home_bg'
   ) as HTMLElement;
 
+  // Guard: Exit if required elements don't exist
+  if (!heroMask || heroImages.length === 0 || !newHeroImageHolder) return;
+
   let targetX = 0;
   let targetY = 0;
   let currentX = 0;
@@ -70,6 +73,9 @@ const flipVideoAnimation = () => {
   const heroImage = document.querySelector('.hero-mask_fig:has(video)');
   const sectionTitle = document.querySelector('.section_hero-home .hero-home_title');
   const sectionDes = document.querySelector('.section_hero-home .hero-home_content p');
+
+  // Guard: Exit if required elements don't exist
+  if (!newHeroImageHolder || !heroImage || !sectionTitle || !sectionDes) return;
 
   const state = Flip.getState(heroImage);
   newHeroImageHolder.appendChild(heroImage!);
@@ -184,8 +190,10 @@ const introAnimation = () => {
   const images = document.querySelectorAll('.hero-mask_fig-wrap .hero-mask_fig');
   const scrollTexts = document.querySelectorAll('.hero-mask_footer');
 
+  // Guard: Exit if required elements don't exist
+  if ((!svg && !mobSvg) || images.length === 0) return;
+
   const tl = gsap.timeline();
-  // if (!svg || !images) return;
 
   const scrollTextLines = Array.from(scrollTexts).map(
     (scrollText) =>
@@ -259,6 +267,9 @@ const headerAnimation = () => {
   const cta = document.querySelector('.floating-cta');
   const triggerSection = document.querySelector('.section_hero-home');
 
+  // Guard: Exit if required elements don't exist
+  if (!header || !cta || !triggerSection) return;
+
   const tl = gsap.timeline();
   const mm = gsap.matchMedia();
 
@@ -308,6 +319,11 @@ export const setupHeroIntro = () => {
   const headerBar = document.querySelector('.header_bar');
 
   const cta = document.querySelector('.floating-cta');
+  
+  // Guard: Exit if required elements don't exist
+  if (!svg && !mobSvg) return;
+  if (images.length === 0) return;
+  if (!cta) return;
 
   const mm = gsap.matchMedia();
 
@@ -356,10 +372,14 @@ export const heroImageAnimations = () => {
     '.section_hero-home .hero-home_bg'
   ) as HTMLElement;
 
-  if (heroImage && newHeroImageHolder) {
-    introAnimation();
-    flipVideoAnimation();
-    mouseMoveAnimation();
-    headerAnimation();
+  // Only run if all required elements exist
+  if (!heroImage || !newHeroImageHolder) {
+    console.log('Hero animation elements not found, skipping animations');
+    return;
   }
+
+  introAnimation();
+  flipVideoAnimation();
+  mouseMoveAnimation();
+  headerAnimation();
 };

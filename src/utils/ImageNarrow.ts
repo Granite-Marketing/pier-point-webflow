@@ -5,6 +5,10 @@ export const imageNarrow = () => {
   // Ask mico to add specific class for this
   const imageNarrow = document.querySelector('.hero_fig');
   const image = imageNarrow?.querySelector('img');
+  
+  // Guard: Exit if required elements don't exist
+  if (!imageNarrow || !image) return;
+  
   const tl = gsap.timeline();
   const mm = gsap.matchMedia();
   mm.add('(min-width: 768px)', () => {

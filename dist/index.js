@@ -146,6 +146,8 @@
       });
     }
     const mainWrapper = document.querySelector(".main-wrapper");
+    if (!mainWrapper)
+      return;
     const { navColor } = mainWrapper.dataset;
     if (navColor === "light") {
       setTimeout(() => {
@@ -1460,10 +1462,14 @@
   // src/utils/floatingMenu.ts
   var floatingMenu = () => {
     const floatingMenuButton = document.querySelector(".floating-menu-button");
+    if (!floatingMenuButton)
+      return;
     floatingMenuButton.addEventListener("click", () => {
       floatingMenuButton.classList.toggle("is-active");
       const headerMenuButton = document.querySelector(".header_menu-button");
-      headerMenuButton.click();
+      if (headerMenuButton) {
+        headerMenuButton.click();
+      }
     });
   };
 
@@ -1548,6 +1554,8 @@
     const newHeroImageHolder = document.querySelector(
       ".section_hero-home .hero-home_bg"
     );
+    if (!heroMask || heroImages.length === 0 || !newHeroImageHolder)
+      return;
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
@@ -1598,6 +1606,8 @@
     const heroImage = document.querySelector(".hero-mask_fig:has(video)");
     const sectionTitle = document.querySelector(".section_hero-home .hero-home_title");
     const sectionDes = document.querySelector(".section_hero-home .hero-home_content p");
+    if (!newHeroImageHolder || !heroImage || !sectionTitle || !sectionDes)
+      return;
     const state = Flip.getState(heroImage);
     newHeroImageHolder.appendChild(heroImage);
     const mm = gsap.matchMedia();
@@ -1701,6 +1711,8 @@
     const mobSvg = document.querySelector(".header_logo.mob");
     const images = document.querySelectorAll(".hero-mask_fig-wrap .hero-mask_fig");
     const scrollTexts = document.querySelectorAll(".hero-mask_footer");
+    if (!svg && !mobSvg || images.length === 0)
+      return;
     const tl = gsap.timeline();
     const scrollTextLines = Array.from(scrollTexts).map(
       (scrollText) => new SplitText(scrollText, {
@@ -1768,6 +1780,8 @@
     const header = document.querySelector(".header_bar");
     const cta = document.querySelector(".floating-cta");
     const triggerSection = document.querySelector(".section_hero-home");
+    if (!header || !cta || !triggerSection)
+      return;
     const tl = gsap.timeline();
     const mm = gsap.matchMedia();
     mm.add("(min-width: 768px)", () => {
@@ -1813,6 +1827,12 @@
     const header = document.querySelector(".header_component");
     const headerBar = document.querySelector(".header_bar");
     const cta = document.querySelector(".floating-cta");
+    if (!svg && !mobSvg)
+      return;
+    if (images.length === 0)
+      return;
+    if (!cta)
+      return;
     const mm = gsap.matchMedia();
     const scrollTextLines = Array.from(scrollTexts).map(
       (scrollText) => new SplitText(scrollText, {
@@ -1851,12 +1871,14 @@
     const newHeroImageHolder = document.querySelector(
       ".section_hero-home .hero-home_bg"
     );
-    if (heroImage && newHeroImageHolder) {
-      introAnimation();
-      flipVideoAnimation();
-      mouseMoveAnimation();
-      headerAnimation();
+    if (!heroImage || !newHeroImageHolder) {
+      console.log("Hero animation elements not found, skipping animations");
+      return;
     }
+    introAnimation();
+    flipVideoAnimation();
+    mouseMoveAnimation();
+    headerAnimation();
   };
 
   // src/utils/horizontalScroll.ts
@@ -1867,6 +1889,8 @@
     if (horizontalScrollSections.length > 0) {
       horizontalScrollSections.forEach((section) => {
         const scrollWrapper = section.querySelector(".h-scroll_transition-wrap");
+        if (!scrollWrapper)
+          return;
         const tl = gsap.timeline();
         gsap.set(scrollWrapper, {
           position: "relative"
@@ -1897,6 +1921,8 @@
   var imageNarrow = () => {
     const imageNarrow2 = document.querySelector(".hero_fig");
     const image = imageNarrow2?.querySelector("img");
+    if (!imageNarrow2 || !image)
+      return;
     const tl = gsap.timeline();
     const mm = gsap.matchMedia();
     mm.add("(min-width: 768px)", () => {
@@ -2302,6 +2328,8 @@
     const headerDescription = roomsCards2.querySelector(".slider-1_content p");
     const buttons = roomsCards2.querySelectorAll(".slider-1_nav a.slider-1_nav-button");
     const cards = roomsCards2.querySelectorAll(".slider-1_item");
+    if (!headerTitle || !headerDescription || cards.length === 0)
+      return;
     const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.inOut" } });
     const titleSplits = Array.from(cards).map((card) => {
       const title = card.querySelector(".slider-1_card-header h3");
@@ -2556,30 +2584,36 @@
       console.warn(".h-scroll_transition-wrap-wrap not found.");
       return;
     }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            checkElementOverlap();
-          } else {
-            if (typeof window.__removeOverlapListeners === "function") {
-              window.__removeOverlapListeners();
-            }
-          }
-        });
+    const scrollWrapper = scrollWrap.querySelector(".h-scroll_transition-wrap");
+    ScrollTrigger.create({
+      trigger: scrollWrap,
+      start: "top top",
+      end: `+=${scrollWrapper ? scrollWrapper.getBoundingClientRect().width : 0}`,
+      onEnter: () => checkElementOverlap(),
+      onEnterBack: () => checkElementOverlap(),
+      onLeave: () => {
+        if (typeof window.__removeOverlapListeners === "function") {
+          window.__removeOverlapListeners();
+        }
       },
-      {
-        root: null,
-        threshold: 0
+      onLeaveBack: () => {
+        if (typeof window.__removeOverlapListeners === "function") {
+          window.__removeOverlapListeners();
+        }
       }
-    );
-    observer.observe(scrollWrap);
+    });
   };
 
   // src/utils/intro.ts
   var intro = () => {
     return new Promise(async (resolve) => {
-      const links = document.querySelector("[data-lottie]").getAttribute("data-lottie").split(",");
+      const lottieElement = document.querySelector("[data-lottie]");
+      if (!lottieElement) {
+        console.log("No lottie element found, skipping intro animation");
+        resolve();
+        return;
+      }
+      const links = lottieElement.getAttribute("data-lottie").split(",");
       const randomLink = links[Math.floor(Math.random() * links.length)];
       console.log(randomLink);
       const { DotLottie } = await import(
@@ -2612,11 +2646,13 @@
   // src/index.ts
   window.Webflow ||= [];
   window.Webflow.push(() => {
-    console.log("test");
-    setupHeroIntro();
-    intro().then(() => {
-      heroImageAnimations();
-    });
+    const isHomePage = document.querySelector("[data-lottie]");
+    if (isHomePage) {
+      setupHeroIntro();
+      intro().then(() => {
+        heroImageAnimations();
+      });
+    }
     mapNeeds();
     sortItems();
     removeOrphans();

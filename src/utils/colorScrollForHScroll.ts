@@ -1,3 +1,5 @@
+declare const ScrollTrigger: any;
+
 const checkElementOverlap = () => {
   const header = document.querySelector('.header');
   const target = document.querySelector('.section_img-mosaic.is-transition');
@@ -64,27 +66,25 @@ const colorScrollForHScroll = () => {
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // console.log('.h-scroll_transition-wrap-wrap is in view — activating overlap check');
-          checkElementOverlap();
-        } else {
-          // console.log('.h-scroll_transition-wrap-wrap is out of view — disabling overlap check');
-          if (typeof window.__removeOverlapListeners === 'function') {
-            window.__removeOverlapListeners();
-          }
-        }
-      });
-    },
-    {
-      root: null,
-      threshold: 0,
-    }
-  );
+  const scrollWrapper = scrollWrap.querySelector('.h-scroll_transition-wrap');
 
-  observer.observe(scrollWrap);
+  ScrollTrigger.create({
+    trigger: scrollWrap,
+    start: 'top top',
+    end: `+=${scrollWrapper ? scrollWrapper.getBoundingClientRect().width : 0}`,
+    onEnter: () => checkElementOverlap(),
+    onEnterBack: () => checkElementOverlap(),
+    onLeave: () => {
+      if (typeof window.__removeOverlapListeners === 'function') {
+        window.__removeOverlapListeners();
+      }
+    },
+    onLeaveBack: () => {
+      if (typeof window.__removeOverlapListeners === 'function') {
+        window.__removeOverlapListeners();
+      }
+    },
+  });
 };
 
 export { colorScrollForHScroll };
