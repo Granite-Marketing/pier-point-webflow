@@ -2,9 +2,17 @@ declare const gsap: any;
 
 export const intro = () => {
   return new Promise<void>(async (resolve) => {
+    const lottieElement = document.querySelector('[data-lottie]');
+
+    // Guard: If no lottie element exists, just resolve immediately
+    if (!lottieElement) {
+      console.log('No lottie element found, skipping intro animation');
+      resolve();
+      return;
+    }
+
     // @ts-ignore
-    // debugger;
-    const links = document.querySelector('[data-lottie]').getAttribute('data-lottie').split(',');
+    const links = lottieElement.getAttribute('data-lottie').split(',');
     // get random link from the links array
     const randomLink = links[Math.floor(Math.random() * links.length)];
 

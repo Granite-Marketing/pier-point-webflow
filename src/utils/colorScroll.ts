@@ -76,6 +76,10 @@ export const colorScroll = () => {
 
   // Handle different heading styles
   const mainWrapper = document.querySelector('.main-wrapper');
+  
+  // Guard: Exit if main-wrapper doesn't exist
+  if (!mainWrapper) return;
+  
   const { navColor } = mainWrapper.dataset;
   if (navColor === 'light') {
     // Clear nav scroll styles on navigation

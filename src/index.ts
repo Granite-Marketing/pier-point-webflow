@@ -22,11 +22,15 @@ import { intro } from '$utils/intro';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log('hell');
-  setupHeroIntro();
-  intro().then(() => {
-    heroImageAnimations();
-  });
+  // Only run home page intro/hero animations if the elements exist
+  const isHomePage = document.querySelector('[data-lottie]');
+  if (isHomePage) {
+    setupHeroIntro();
+    intro().then(() => {
+      heroImageAnimations();
+    });
+  }
+
   mapNeeds();
   sortItems();
   removeOrphans();

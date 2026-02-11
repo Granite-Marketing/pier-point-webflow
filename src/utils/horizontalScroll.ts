@@ -6,7 +6,11 @@ export const horizontalScroll = () => {
   const horizontalScrollSections = document.querySelectorAll('.h-scroll_transition-wrap-wrap');
   if (horizontalScrollSections.length > 0) {
     horizontalScrollSections.forEach((section) => {
-      const scrollWrapper = section.querySelector('.h-scroll_transition-wrap')!;
+      const scrollWrapper = section.querySelector('.h-scroll_transition-wrap');
+      
+      // Guard: Skip if wrapper doesn't exist
+      if (!scrollWrapper) return;
+      
       const tl = gsap.timeline();
 
       gsap.set(scrollWrapper, {

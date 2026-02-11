@@ -10,6 +10,9 @@ export const roomsCards = () => {
   const buttons = roomsCards.querySelectorAll('.slider-1_nav a.slider-1_nav-button');
   const cards = roomsCards.querySelectorAll('.slider-1_item');
 
+  // Guard: Exit if required elements don't exist
+  if (!headerTitle || !headerDescription || cards.length === 0) return;
+
   const tl = gsap.timeline({ defaults: { duration: 1, ease: 'power2.inOut' } });
 
   const titleSplits = Array.from(cards).map((card) => {

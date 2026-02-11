@@ -1,6 +1,6 @@
 {
   "name": "@granite-marketing/pier-point-webflow",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "description": "Pier Point Webflow animation project for Studio Circa.",
   "homepage": "https://github.com/Granite-Marketing/developer-starter#readme",
   "license": "ISC",
@@ -31,7 +31,6 @@
     "format": "prettier --write ./src",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "release": "changeset publish",
     "update": "pnpm update -i -L -r"
   },
   "devDependencies": {
