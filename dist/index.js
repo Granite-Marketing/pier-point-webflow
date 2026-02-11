@@ -1840,7 +1840,8 @@
         mask: "lines"
       }).lines
     );
-    gsap.set([svg, mobSvg], {
+    console.log({ svg, mobSvg });
+    gsap.set([!svg, !mobSvg], {
       overflow: "hidden"
     });
     mm.add("(min-width: 768px)", () => {
@@ -2615,13 +2616,17 @@
       }
       const links = lottieElement.getAttribute("data-lottie").split(",");
       const randomLink = links[Math.floor(Math.random() * links.length)];
-      console.log(randomLink);
+      console.log({ randomNumber: Math.floor(Math.random() * links.length) });
       const { DotLottie } = await import(
         // @ts-ignore
         "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web@latest/+esm"
       );
       const target = document.querySelector("#intro");
+      console.log(target);
       const canvas = document.createElement("canvas");
+      canvas.style.cssText = `
+      width: 100%;
+    `;
       canvas.id = "lottie-animation";
       target?.appendChild(canvas);
       const dotLottie = new DotLottie({
