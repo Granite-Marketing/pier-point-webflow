@@ -22,7 +22,7 @@ import { intro } from '$utils/intro';
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log('test');
+  console.log('hell');
   setupHeroIntro();
   intro().then(() => {
     heroImageAnimations();

@@ -319,7 +319,8 @@ export const setupHeroIntro = () => {
       }).lines
   );
 
-  gsap.set([svg, mobSvg], {
+  console.log({ svg, mobSvg });
+  gsap.set([!svg, !mobSvg], {
     overflow: 'hidden',
   });
 
