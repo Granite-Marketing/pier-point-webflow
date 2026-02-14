@@ -1,5 +1,18 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.32
+
+### Patch Changes
+
+- add unversioned files
+
+## 1.0.31
+
+### Patch Changes
+
+- add animation finish class
+- 2b0129e: loading animation updates
+
 ## 1.0.30
 
 ### Patch Changes
