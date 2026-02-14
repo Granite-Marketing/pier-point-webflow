@@ -105,6 +105,9 @@ export const dualImage = () => {
             duration: 1,
             ease: 'power2.inOut',
           },
+          onComplete: () => {
+            section.classList.add('is-animated');
+          },
         });
 
         const figures = section.querySelectorAll('figure');
@@ -275,6 +278,20 @@ export const dualImage = () => {
         const links = section.querySelectorAll('a.button.is-link');
         const liItems = section.querySelectorAll('li');
         const otherLinks = section.querySelectorAll('a.sticky-details_link');
+        const totalAnimations =
+          figures.length +
+          (headerTitle ? 1 : 0) +
+          paragraphs.length +
+          links.length +
+          (liItems.length > 0 ? 1 : 0) +
+          otherLinks.length;
+        let completedCount = 0;
+        const maybeAddCompleteClass = () => {
+          completedCount += 1;
+          if (completedCount >= totalAnimations) {
+            section.classList.add('is-animated');
+          }
+        };
         if (figures.length > 0) {
           figures.forEach((figure) => {
             const tl = gsap.timeline({
@@ -282,6 +299,7 @@ export const dualImage = () => {
                 duration: duration,
                 ease: ease,
               },
+              onComplete: maybeAddCompleteClass,
             });
             gsap.set(figure, {
               clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
@@ -305,6 +323,7 @@ export const dualImage = () => {
               duration: duration,
               ease: ease,
             },
+            onComplete: maybeAddCompleteClass,
           });
           const titleSplit = new SplitText(headerTitle, {
             type: 'lines',
@@ -354,6 +373,7 @@ export const dualImage = () => {
                 duration: duration,
                 ease: ease,
               },
+              onComplete: maybeAddCompleteClass,
             });
             const paragraphSplit = new SplitText(paragraph, {
               type: 'lines',
@@ -386,6 +406,7 @@ export const dualImage = () => {
                 duration: duration,
                 ease: ease,
               },
+              onComplete: maybeAddCompleteClass,
             });
             const linkSplit = new SplitText(link.querySelector('div'), {
               type: 'lines',
@@ -434,6 +455,7 @@ export const dualImage = () => {
               duration: duration,
               ease: ease,
             },
+            onComplete: maybeAddCompleteClass,
           });
           liItems.forEach((li) => {
             const liSplit = new SplitText(li, {
@@ -469,6 +491,7 @@ export const dualImage = () => {
                 duration: duration,
                 ease: ease,
               },
+              onComplete: maybeAddCompleteClass,
             });
             const otherLinkSplit = new SplitText(otherLink.querySelector('div'), {
               type: 'lines',
