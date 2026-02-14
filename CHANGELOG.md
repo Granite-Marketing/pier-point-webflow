@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.31
+
+### Patch Changes
+
+- 2b0129e: loading animation updates
+
 ## 1.0.30
 
 ### Patch Changes
