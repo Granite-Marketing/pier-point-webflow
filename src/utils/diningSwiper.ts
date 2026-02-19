@@ -80,6 +80,13 @@ class DiningSlider {
     this.nextEl = this.textSliderEl.parentElement!.querySelector('[swiper-button-next]');
     this.prevEl = this.textSliderEl.parentElement!.querySelector('[swiper-button-prev]');
 
+    // Skip slider initialization and hide buttons if only one slide
+    if (this.textSlides!.length <= 1) {
+      if (this.nextEl) this.nextEl.style.display = 'none';
+      if (this.prevEl) this.prevEl.style.display = 'none';
+      return;
+    }
+
     this.initSliders();
     this.initButtons();
     this.introAnimation().then(() => {
