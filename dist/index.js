@@ -644,6 +644,13 @@
       );
       this.nextEl = this.textSliderEl.parentElement.querySelector("[swiper-button-next]");
       this.prevEl = this.textSliderEl.parentElement.querySelector("[swiper-button-prev]");
+      if (this.textSlides.length <= 1) {
+        if (this.nextEl)
+          this.nextEl.style.display = "none";
+        if (this.prevEl)
+          this.prevEl.style.display = "none";
+        return;
+      }
       this.initSliders();
       this.initButtons();
       this.introAnimation().then(() => {
@@ -2495,6 +2502,13 @@
       swiperEl.classList.add("swiper");
       swiperWrapper?.classList.add("swiper-wrapper");
       swiperSlides.forEach((s) => s.classList.add("swiper-slide"));
+      if (swiperSlides.length <= 1) {
+        if (nextEl instanceof HTMLElement)
+          nextEl.style.display = "none";
+        if (prevEl instanceof HTMLElement)
+          prevEl.style.display = "none";
+        return;
+      }
       if (isDefault) {
         swiper = new Swiper(swiperEl, {
           loop: true,
