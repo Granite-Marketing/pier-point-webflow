@@ -257,10 +257,10 @@ export const dualImage = () => {
             );
           });
         }
-
+        console.log('create scroll trigger for section:', section);
         ScrollTrigger.create({
           trigger: section,
-          start: 'top 50%',
+          start: 'top 65%',
           markers: false,
           animation: tl,
         });
