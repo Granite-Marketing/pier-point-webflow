@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.35
+
+### Patch Changes
+
+- test commit
+
 ## 1.0.34
 
 ### Patch Changes
