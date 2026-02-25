@@ -1,5 +1,13 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.34
+
+### Patch Changes
+
+- 1595864: update map api key
+- splittext and nbsp
+- 63b4cc4: split timeline animation dual image
+
 ## 1.0.33
 
 ### Patch Changes
