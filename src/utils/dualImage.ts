@@ -165,10 +165,18 @@ export const dualImage = () => {
             defaults: { duration, ease },
             onComplete: maybeAddCompleteClass,
           });
+
+          paragraph.innerHTML = paragraph.innerHTML.replace(/&nbsp;/g, '¤');
+
           const paragraphSplit = new SplitText(paragraph, {
             type: 'words,lines',
             mask: 'lines',
           });
+
+          paragraphSplit.words.forEach((word) => {
+            word.innerHTML = word.innerHTML.replace(/¤/g, '&nbsp;');
+          });
+
           gsap.set(paragraphSplit.lines, { overflow: 'hidden' });
           gsap.set(paragraphSplit.lines, { yPercent: 100 });
           tl.to(paragraphSplit.lines, {
