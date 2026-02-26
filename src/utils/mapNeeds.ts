@@ -35,5 +35,5 @@ export const mapNeeds = () => {
     d[l]
       ? console.warn(p + ' only loads once. Ignoring:', g)
       : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
-  })({ key: 'AIzaSyCtT3ZZCu-VDKcrGFpkNgHekdVwAPlBoNE', v: 'weekly' });
+  })({ key: 'AIzaSyBcwe_qJ-IQwpuVJTWN5euk9fCzeoGwJhI', v: 'weekly' });
 };

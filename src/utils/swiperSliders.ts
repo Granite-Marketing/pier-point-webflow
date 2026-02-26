@@ -32,6 +32,13 @@ export const swiperSliders = () => {
     swiperWrapper?.classList.add('swiper-wrapper');
     swiperSlides.forEach((s) => s.classList.add('swiper-slide'));
 
+    // Skip initialization and hide buttons if only one slide
+    if (swiperSlides.length <= 1) {
+      if (nextEl instanceof HTMLElement) nextEl.style.display = 'none';
+      if (prevEl instanceof HTMLElement) prevEl.style.display = 'none';
+      return;
+    }
+
     if (isDefault) {
       swiper = new Swiper(swiperEl as HTMLElement, {
         loop: true,

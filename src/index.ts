@@ -24,7 +24,7 @@ window.Webflow ||= [];
 window.Webflow.push(() => {
   // Only run home page intro/hero animations if the elements exist
   const isHomePage = document.querySelector('[data-lottie]');
-  console.log('Is home page:', isHomePage);
+  window.TESTCOMMIT = 'testcommit';
   if (isHomePage) {
     setupHeroIntro();
     intro().then(() => {

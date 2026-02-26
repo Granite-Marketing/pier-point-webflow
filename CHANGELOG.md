@@ -1,5 +1,38 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.35
+
+### Patch Changes
+
+- test commit
+
+## 1.0.34
+
+### Patch Changes
+
+- 1595864: update map api key
+- splittext and nbsp
+- 63b4cc4: split timeline animation dual image
+
+## 1.0.33
+
+### Patch Changes
+
+- fix swiper with one elem
+
+## 1.0.32
+
+### Patch Changes
+
+- add unversioned files
+
+## 1.0.31
+
+### Patch Changes
+
+- add animation finish class
+- 2b0129e: loading animation updates
+
 ## 1.0.30
 
 ### Patch Changes
