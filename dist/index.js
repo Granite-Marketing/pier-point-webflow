@@ -644,6 +644,13 @@
       );
       this.nextEl = this.textSliderEl.parentElement.querySelector("[swiper-button-next]");
       this.prevEl = this.textSliderEl.parentElement.querySelector("[swiper-button-prev]");
+      if (this.textSlides.length <= 1) {
+        if (this.nextEl)
+          this.nextEl.style.display = "none";
+        if (this.prevEl)
+          this.prevEl.style.display = "none";
+        return;
+      }
       this.initSliders();
       this.initButtons();
       this.introAnimation().then(() => {
@@ -1020,207 +1027,154 @@
       );
     }
   };
-  var figureAnimation = (figures, tl, order) => {
-    figures.forEach((figure, index) => {
-      const animationOrder = figure.getAttribute("data-animation-order");
-      tl.fromTo(
-        figure,
-        {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
-        },
-        {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
-        },
-        order ? "-=75%" : animationOrder ?? `-=${index * 0.75}`
-      );
-    });
-  };
-  var paragraphsAnimation = (paragraphs, tl, order) => {
-    paragraphs.forEach((paragraph) => {
-      const animationOrder = paragraph.getAttribute("data-animation-order");
-      const paragraphSplit = new SplitText(paragraph, {
-        type: "words,lines",
-        mask: "lines"
-      });
-      gsap.set(paragraphSplit.lines, {
-        overflow: "hidden"
-      });
-      gsap.set(paragraphSplit.lines, {
-        yPercent: 100
-      });
-      tl.to(
-        paragraphSplit.lines,
-        {
-          yPercent: 0,
-          stagger: 0.15
-        },
-        order ?? animationOrder ?? null
-      );
-    });
-  };
   var dualImage = () => {
     const sections = document.querySelectorAll("[data-animation-general]");
-    const elems = document.getElementsByTagName("*");
     if (sections.length > 0) {
       sections.forEach((section) => {
         const mm = gsap.matchMedia();
         mm.add("(min-width: 768px)", () => {
-          const tl = gsap.timeline({
-            defaults: {
-              duration: 1,
-              ease: "power2.inOut"
-            }
-          });
+          const duration = 1;
+          const ease = "power2.inOut";
           const figures = section.querySelectorAll("figure");
           const headerTitles = section.querySelectorAll("header > *:first-child");
           const paragraphs = section.querySelectorAll("p");
           const links = section.querySelectorAll("a.button.is-link");
           const liItems = section.querySelectorAll("li");
           const otherLinks = section.querySelectorAll("a.sticky-details_link");
-          const indexOfTitle = Array.from(elems).indexOf(headerTitles[0]);
-          const indexOfFirstFigure = Array.from(elems).indexOf(figures[0]);
-          const indexOfFirstParagraph = Array.from(elems).indexOf(paragraphs[0]);
-          if (indexOfTitle >= 0 && indexOfTitle < indexOfFirstFigure) {
-            if (headerTitles.length > 0) {
-              headerTitles.forEach((headerTitle) => {
-                titleAnimation(headerTitle, tl);
-              });
-            }
-            if (indexOfFirstFigure > indexOfFirstParagraph) {
-              if (paragraphs.length > 0) {
-                paragraphsAnimation(paragraphs, tl, "-=70%");
-              }
-              if (figures.length > 0) {
-                figureAnimation(figures, tl, true);
-              }
-            } else {
-              if (figures.length > 0) {
-                figureAnimation(figures, tl, true);
-              }
-              if (paragraphs.length > 0) {
-                paragraphsAnimation(paragraphs, tl, "-=50%");
-              }
-            }
-          } else {
-            figureAnimation(figures, tl);
-            if (indexOfFirstParagraph > indexOfTitle) {
-              if (headerTitles.length > 0) {
-                headerTitles.forEach((headerTitle) => {
-                  titleAnimation(headerTitle, tl, "-=85%");
-                });
-              }
-              if (paragraphs.length > 0) {
-                paragraphsAnimation(paragraphs, tl, "-=60%");
-              }
-            } else {
-              if (paragraphs.length > 0) {
-                paragraphsAnimation(paragraphs, tl, "-=50%");
-              }
-              if (headerTitles.length > 0) {
-                headerTitles.forEach((headerTitle) => {
-                  titleAnimation(headerTitle, tl);
-                });
-              }
-            }
+          const totalAnimations = figures.length + headerTitles.length + paragraphs.length + links.length + (liItems.length > 0 ? 1 : 0) + otherLinks.length;
+          if (totalAnimations === 0) {
+            section.classList.add("is-animated");
+            return;
           }
-          if (links.length > 0) {
-            links.forEach((link) => {
-              const linkSplit = new SplitText(link.querySelector("div"), {
-                type: "words,lines",
-                mask: "lines"
-              });
-              const icon = link.querySelector("svg");
-              gsap.set(link, {
-                overflow: "hidden"
-              });
-              gsap.set(linkSplit.lines, {
-                overflow: "hidden"
-              });
-              tl.fromTo(
-                linkSplit.lines,
-                {
-                  yPercent: 100
-                },
-                {
-                  yPercent: 0,
-                  // duration: 1,
-                  stagger: 0.05
-                },
-                "-=.75"
-              ).fromTo(
-                icon,
-                {
-                  yPercent: 140
-                },
-                {
-                  yPercent: 0,
-                  // duration: 1,
-                  stagger: 0.1
-                },
-                "-=.75"
-              );
+          let completedCount = 0;
+          const maybeAddCompleteClass = () => {
+            completedCount += 1;
+            if (completedCount >= totalAnimations) {
+              section.classList.add("is-animated");
+            }
+          };
+          figures.forEach((figure) => {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
             });
-          }
+            gsap.set(figure, {
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
+            });
+            tl.to(figure, {
+              clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+            });
+            ScrollTrigger.create({
+              trigger: figure,
+              start: "top 80%",
+              markers: false,
+              animation: tl
+            });
+          });
+          headerTitles.forEach((headerTitle) => {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
+            });
+            titleAnimation(headerTitle, tl);
+            ScrollTrigger.create({
+              trigger: headerTitle,
+              start: "top 80%",
+              markers: false,
+              animation: tl
+            });
+          });
+          paragraphs.forEach((paragraph) => {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
+            });
+            paragraph.innerHTML = paragraph.innerHTML.replace(/&nbsp;/g, "\xA4");
+            const paragraphSplit = new SplitText(paragraph, {
+              type: "words,lines",
+              mask: "lines"
+            });
+            paragraphSplit.words.forEach((word) => {
+              word.innerHTML = word.innerHTML.replace(/¤/g, "&nbsp;");
+            });
+            gsap.set(paragraphSplit.lines, { overflow: "hidden" });
+            gsap.set(paragraphSplit.lines, { yPercent: 100 });
+            tl.to(paragraphSplit.lines, {
+              yPercent: 0,
+              stagger: 0.15
+            });
+            ScrollTrigger.create({
+              trigger: paragraph,
+              start: "top 80%",
+              markers: false,
+              animation: tl
+            });
+          });
+          links.forEach((link) => {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
+            });
+            const linkSplit = new SplitText(link.querySelector("div"), {
+              type: "words,lines",
+              mask: "lines"
+            });
+            const icon = link.querySelector("svg");
+            gsap.set(link, { overflow: "hidden" });
+            gsap.set(linkSplit.lines, { overflow: "hidden" });
+            tl.fromTo(linkSplit.lines, { yPercent: 100 }, { yPercent: 0, stagger: 0.05 }).fromTo(
+              icon,
+              { yPercent: 140 },
+              { yPercent: 0, stagger: 0.1 },
+              "-=.75"
+            );
+            ScrollTrigger.create({
+              trigger: link,
+              start: "top 80%",
+              markers: false,
+              animation: tl
+            });
+          });
           if (liItems.length > 0) {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
+            });
             liItems.forEach((li) => {
-              const liSplit = new SplitText(li, {
-                type: "lines",
-                mask: "lines"
-              });
-              gsap.set(liSplit.lines, {
-                overflow: "hidden"
-              });
-              tl.fromTo(
-                liSplit.lines,
-                {
-                  yPercent: 120
-                },
-                {
-                  yPercent: 0,
-                  stagger: 0.01
-                },
-                "-=1"
-              );
+              const liSplit = new SplitText(li, { type: "lines", mask: "lines" });
+              gsap.set(liSplit.lines, { overflow: "hidden" });
+              tl.fromTo(liSplit.lines, { yPercent: 120 }, { yPercent: 0, stagger: 0.01 });
+            });
+            ScrollTrigger.create({
+              trigger: liItems[0].parentElement || liItems[0],
+              start: "top 80%",
+              markers: false,
+              animation: tl
             });
           }
-          if (otherLinks.length > 0) {
-            otherLinks.forEach((otherLink) => {
-              const otherLinkSplit = new SplitText(otherLink.querySelector("div"), {
-                type: "lines",
-                mask: "lines"
-              });
-              gsap.set(otherLink, {
-                overflow: "hidden"
-              });
-              gsap.set(otherLinkSplit.lines, {
-                overflow: "hidden"
-              });
-              tl.fromTo(
-                otherLink.querySelector("svg"),
-                {
-                  yPercent: 140
-                },
-                {
-                  yPercent: 0
-                },
-                "-=1"
-              ).fromTo(
-                otherLinkSplit.lines,
-                {
-                  yPercent: 100
-                },
-                {
-                  yPercent: 0
-                },
-                "-=.75"
-              );
+          otherLinks.forEach((otherLink) => {
+            const tl = gsap.timeline({
+              defaults: { duration, ease },
+              onComplete: maybeAddCompleteClass
             });
-          }
-          ScrollTrigger.create({
-            trigger: section,
-            start: "top 50%",
-            markers: false,
-            animation: tl
+            const otherLinkSplit = new SplitText(otherLink.querySelector("div"), {
+              type: "lines",
+              mask: "lines"
+            });
+            gsap.set(otherLink, { overflow: "hidden" });
+            gsap.set(otherLinkSplit.lines, { overflow: "hidden" });
+            tl.fromTo(otherLink.querySelector("svg"), { yPercent: 140 }, { yPercent: 0 }).fromTo(
+              otherLinkSplit.lines,
+              { yPercent: 100 },
+              { yPercent: 0 },
+              "-=.75"
+            );
+            ScrollTrigger.create({
+              trigger: otherLink,
+              start: "top 80%",
+              markers: false,
+              animation: tl
+            });
           });
         });
         mm.add("(max-width: 767px)", () => {
@@ -1232,13 +1186,22 @@
           const links = section.querySelectorAll("a.button.is-link");
           const liItems = section.querySelectorAll("li");
           const otherLinks = section.querySelectorAll("a.sticky-details_link");
+          const totalAnimations = figures.length + (headerTitle ? 1 : 0) + paragraphs.length + links.length + (liItems.length > 0 ? 1 : 0) + otherLinks.length;
+          let completedCount = 0;
+          const maybeAddCompleteClass = () => {
+            completedCount += 1;
+            if (completedCount >= totalAnimations) {
+              section.classList.add("is-animated");
+            }
+          };
           if (figures.length > 0) {
             figures.forEach((figure) => {
               const tl = gsap.timeline({
                 defaults: {
                   duration,
                   ease
-                }
+                },
+                onComplete: maybeAddCompleteClass
               });
               gsap.set(figure, {
                 clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)"
@@ -1259,7 +1222,8 @@
               defaults: {
                 duration,
                 ease
-              }
+              },
+              onComplete: maybeAddCompleteClass
             });
             const titleSplit = new SplitText(headerTitle, {
               type: "lines",
@@ -1306,7 +1270,8 @@
                 defaults: {
                   duration,
                   ease
-                }
+                },
+                onComplete: maybeAddCompleteClass
               });
               const paragraphSplit = new SplitText(paragraph, {
                 type: "lines",
@@ -1336,7 +1301,8 @@
                 defaults: {
                   duration,
                   ease
-                }
+                },
+                onComplete: maybeAddCompleteClass
               });
               const linkSplit = new SplitText(link.querySelector("div"), {
                 type: "lines",
@@ -1382,7 +1348,8 @@
               defaults: {
                 duration,
                 ease
-              }
+              },
+              onComplete: maybeAddCompleteClass
             });
             liItems.forEach((li) => {
               const liSplit = new SplitText(li, {
@@ -1416,7 +1383,8 @@
                 defaults: {
                   duration,
                   ease
-                }
+                },
+                onComplete: maybeAddCompleteClass
               });
               const otherLinkSplit = new SplitText(otherLink.querySelector("div"), {
                 type: "lines",
@@ -1883,39 +1851,83 @@
   };
 
   // src/utils/horizontalScroll.ts
+  var animateCard = (card) => {
+    const title = card.querySelector("h3");
+    const figure = card.querySelector(".img-mosaic_fig");
+    const tl = gsap.timeline();
+    tl.fromTo(
+      figure,
+      { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" },
+      { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", ease: "power2.out", duration: 0.5 }
+    ).fromTo(
+      title?.querySelectorAll(".word"),
+      { yPercent: 100 },
+      { yPercent: 0, ease: "power2.out", stagger: 0.1, duration: 0.5 }
+    );
+  };
   var horizontalScroll = () => {
     if (matchMedia("(min-width: 992px)").matches === false)
       return;
     const horizontalScrollSections = document.querySelectorAll(".h-scroll_transition-wrap-wrap");
-    if (horizontalScrollSections.length > 0) {
-      horizontalScrollSections.forEach((section) => {
-        const scrollWrapper = section.querySelector(".h-scroll_transition-wrap");
-        if (!scrollWrapper)
-          return;
-        const tl = gsap.timeline();
-        gsap.set(scrollWrapper, {
-          position: "relative"
-        });
-        tl.to(scrollWrapper, {
-          x: "100vw",
-          xPercent: -100,
-          ease: "none"
-        });
-        tl.to(".section_img-mosaic .img-mosaic_component", {
-          yPercent: -90,
-          ease: "none"
-        });
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          end: `+=${scrollWrapper.getBoundingClientRect().width}`,
-          scrub: true,
-          markers: false,
-          pin: true,
-          animation: tl
-        });
+    if (horizontalScrollSections.length === 0)
+      return;
+    horizontalScrollSections.forEach((section) => {
+      const scrollWrapper = section.querySelector(".h-scroll_transition-wrap");
+      const blueSectionHeaderTitle = section.querySelector(".img-mosaic_header h2");
+      const blueSectionCards = Array.from(section.querySelectorAll(".img-mosaic_item"));
+      if (!scrollWrapper)
+        return;
+      const titleSplit = new SplitText(blueSectionHeaderTitle, {
+        type: "words",
+        mask: "words",
+        reduceWhiteSpace: true
       });
-    }
+      gsap.set(titleSplit.words, { yPercent: 100 });
+      gsap.set(scrollWrapper, { position: "relative" });
+      blueSectionCards.forEach((card) => {
+        const figure = card.querySelector(".img-mosaic_fig");
+        const title = card.querySelector("h3");
+        gsap.set(figure, {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
+        });
+        if (title) {
+          const split = new SplitText(title, { type: "words", mask: "words", wordsClass: "word" });
+          gsap.set(split.words, { yPercent: 100 });
+        }
+      });
+      const animatedCards = /* @__PURE__ */ new Set();
+      const cardThresholds = blueSectionCards.map((_, i) => i / blueSectionCards.length);
+      const tl = gsap.timeline();
+      tl.to(scrollWrapper, {
+        x: "100vw",
+        xPercent: -100,
+        ease: "none",
+        onComplete: () => {
+          gsap.to(titleSplit.words, { yPercent: 0, ease: "power2.out", stagger: 0.05 });
+        }
+      });
+      tl.to(".section_img-mosaic .img-mosaic_component", {
+        yPercent: -90,
+        ease: "none",
+        onUpdate: function() {
+          const progress = this.progress();
+          cardThresholds.forEach((threshold, i) => {
+            if (progress >= threshold && !animatedCards.has(i)) {
+              animatedCards.add(i);
+              animateCard(blueSectionCards[i]);
+            }
+          });
+        }
+      });
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: `+=${scrollWrapper.getBoundingClientRect().width}`,
+        scrub: true,
+        pin: true,
+        animation: tl
+      });
+    });
   };
 
   // src/utils/ImageNarrow.ts
@@ -2209,17 +2221,429 @@
 <path d="M26 16.5555C26 22.7778 18 28.1111 18 28.1111C18 28.1111 10 22.7778 10 16.5555C10 14.4338 10.8429 12.399 12.3431 10.8987C13.8434 9.3984 15.8783 8.55554 18 8.55554C20.1217 8.55554 22.1566 9.3984 23.6569 10.8987C25.1571 12.399 26 14.4338 26 16.5555Z" stroke="${colors.normal.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
 <path d="M18.0002 19.2222C19.4729 19.2222 20.6668 18.0283 20.6668 16.5555C20.6668 15.0828 19.4729 13.8889 18.0002 13.8889C16.5274 13.8889 15.3335 15.0828 15.3335 16.5555C15.3335 18.0283 16.5274 19.2222 18.0002 19.2222Z" stroke="${colors.normal.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
 </svg>
-`,fe=`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 300ms ease-in-out; transform: scale(1.5);">
-<circle cx="18" cy="18" r="18" fill="${A.active.bg}" style="transition: fill 300ms ease-in-out"/>
-<path d="M26 16.5555C26 22.7778 18 28.1111 18 28.1111C18 28.1111 10 22.7778 10 16.5555C10 14.4338 10.8429 12.399 12.3431 10.8987C13.8434 9.3984 15.8783 8.55554 18 8.55554C20.1217 8.55554 22.1566 9.3984 23.6569 10.8987C25.1571 12.399 26 14.4338 26 16.5555Z" stroke="${A.active.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
-<path d="M18.0002 19.2222C19.4729 19.2222 20.6668 18.0283 20.6668 16.5555C20.6668 15.0828 19.4729 13.8889 18.0002 13.8889C16.5274 13.8889 15.3335 15.0828 15.3335 16.5555C15.3335 18.0283 16.5274 19.2222 18.0002 19.2222Z" stroke="${A.active.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
+`;
+    activePinSvgString = `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 300ms ease-in-out; transform: scale(1.5);">
+<circle cx="18" cy="18" r="18" fill="${colors.active.bg}" style="transition: fill 300ms ease-in-out"/>
+<path d="M26 16.5555C26 22.7778 18 28.1111 18 28.1111C18 28.1111 10 22.7778 10 16.5555C10 14.4338 10.8429 12.399 12.3431 10.8987C13.8434 9.3984 15.8783 8.55554 18 8.55554C20.1217 8.55554 22.1566 9.3984 23.6569 10.8987C25.1571 12.399 26 14.4338 26 16.5555Z" stroke="${colors.active.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
+<path d="M18.0002 19.2222C19.4729 19.2222 20.6668 18.0283 20.6668 16.5555C20.6668 15.0828 19.4729 13.8889 18.0002 13.8889C16.5274 13.8889 15.3335 15.0828 15.3335 16.5555C15.3335 18.0283 16.5274 19.2222 18.0002 19.2222Z" stroke="${colors.active.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
 </svg>
-`,he=`<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 300ms ease-in-out;">
-<circle cx="18" cy="18" r="18" fill="${A.unique.bg}" style="transition: fill 300ms ease-in-out"/>
-<path d="M26 16.5555C26 22.7778 18 28.1111 18 28.1111C18 28.1111 10 22.7778 10 16.5555C10 14.4338 10.8429 12.399 12.3431 10.8987C13.8434 9.3984 15.8783 8.55554 18 8.55554C20.1217 8.55554 22.1566 9.3984 23.6569 10.8987C25.1571 12.399 26 14.4338 26 16.5555Z" stroke="${A.unique.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
-<path d="M18.0002 19.2222C19.4729 19.2222 20.6668 18.0283 20.6668 16.5555C20.6668 15.0828 19.4729 13.8889 18.0002 13.8889C16.5274 13.8889 15.3335 15.0828 15.3335 16.5555C15.3335 18.0283 16.5274 19.2222 18.0002 19.2222Z" stroke="${A.unique.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
+`;
+    uniquePinSvgString = `<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="transition: transform 300ms ease-in-out;">
+<circle cx="18" cy="18" r="18" fill="${colors.unique.bg}" style="transition: fill 300ms ease-in-out"/>
+<path d="M26 16.5555C26 22.7778 18 28.1111 18 28.1111C18 28.1111 10 22.7778 10 16.5555C10 14.4338 10.8429 12.399 12.3431 10.8987C13.8434 9.3984 15.8783 8.55554 18 8.55554C20.1217 8.55554 22.1566 9.3984 23.6569 10.8987C25.1571 12.399 26 14.4338 26 16.5555Z" stroke="${colors.unique.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
+<path d="M18.0002 19.2222C19.4729 19.2222 20.6668 18.0283 20.6668 16.5555C20.6668 15.0828 19.4729 13.8889 18.0002 13.8889C16.5274 13.8889 15.3335 15.0828 15.3335 16.5555C15.3335 18.0283 16.5274 19.2222 18.0002 19.2222Z" stroke="${colors.unique.line}" stroke-linecap="round" stroke-linejoin="round" style="transition: stroke 300ms ease-in-out"/>
 </svg>
-`};var ye=()=>{document.querySelector(".the-map")&&(e=>{var t,o,n,i="The Google Maps JavaScript API",s="google",l="importLibrary",c="__ib__",u=document,f=window;f=f[s]||(f[s]={});var w=f.maps||(f.maps={}),h=new Set,g=new URLSearchParams,a=()=>t||(t=new Promise(async(p,d)=>{await(o=u.createElement("script")),g.set("libraries",[...h]+"");for(n in e)g.set(n.replace(/[A-Z]/g,E=>"_"+E[0].toLowerCase()),e[n]);g.set("callback",s+".maps."+c),o.src=`https://maps.${s}apis.com/maps/api/js?`+g,w[c]=p,o.onerror=()=>t=d(Error(i+" could not load.")),o.nonce=u.querySelector("script[nonce]")?.nonce||"",u.head.append(o)}));w[l]?console.warn(i+" only loads once. Ignoring:",e):w[l]=(p,...d)=>h.add(p)&&a().then(()=>w[l](p,...d))})({key:"AIzaSyBcwe_qJ-IQwpuVJTWN5euk9fCzeoGwJhI",v:"weekly"})};var we=()=>{document.querySelectorAll('[button-function="modal-open"]').forEach(t=>{t.addEventListener("click",o=>{o.preventDefault();let n=t.getAttribute("button-function-arg1"),i=t.getAttribute("button-function-arg2");document.querySelector(`[modal][modal-type=${n}][modal-name=${i}]`)?.setAttribute("is-open",""),document.body.style.top=`-${window.scrollY}px`,document.body.classList.add("no-scroll"),ie()})}),document.querySelectorAll("[modal-close]").forEach(t=>{t.addEventListener("click",o=>{o.preventDefault();let n=document.body.style.top;n=parseInt(n||"0")*-1,t.closest("[modal]")?.removeAttribute("is-open"),document.body.classList.remove("no-scroll"),document.body.style.top="",window.scrollTo(0,n),se()})})};function Z(r){document.querySelectorAll(r).forEach(t=>{if(t.hasAttribute("ignore-orphan")||!t.textContent||t.children.length)return;let n=t.textContent.split(" ");if(n.length<2)return;let i=n.slice(-2).join("\xA0"),s=n.slice(0,-2).join(" ");t.innerHTML=`${s} ${i}`})}var xe=()=>{Z("p"),Z(".orphan-free, [orphan-free]"),Z("h1, h2, h3, h4, h5, h6")};var be=()=>{document.querySelectorAll("[data-sort]").forEach(e=>{e.querySelectorAll("[data-sort-order]").forEach(o=>{let n=o.getAttribute("data-sort-order");n&&(o.style.order=n)})})};var Ee=()=>{let r=document.querySelector(".rooms-cards-animation");if(!r)return;let e=r.querySelector(".slider-1_header h2"),t=r.querySelector(".slider-1_content p"),o=r.querySelectorAll(".slider-1_nav a.slider-1_nav-button"),n=r.querySelectorAll(".slider-1_item");if(!e||!t||n.length===0)return;let i=gsap.timeline({defaults:{duration:1,ease:"power2.inOut"}}),s=Array.from(n).map(h=>{let g=h.querySelector(".slider-1_card-header h3");return new SplitText(g,{type:"words,lines",mask:"lines"}).lines}),l=Array.from(n).map(h=>{let g=h.querySelector(".text-rich-text p ");return new SplitText(g,{type:"words,lines",mask:"lines"}).lines}),c=Array.from(n).map(h=>h.querySelector(".slider-1_item-fig")),u=Array.from(n).map(h=>h.querySelector(".slider-1_card-footer a")),f=new SplitText(e,{type:"words,lines",mask:"lines"}),w=new SplitText(t,{type:"words,lines",mask:"lines"});gsap.set(o[0].parentElement,{overflow:"hidden"}),n.forEach(h=>{let g=h.querySelector(".slider-1_card-footer");gsap.set(g,{overflow:"hidden"})}),i.add("header",0),i.add("cards",.75),i.fromTo(f.lines,{yPercent:100},{yPercent:0},"header").fromTo(w.lines,{yPercent:100},{yPercent:0,stagger:.1},"header+=.15").fromTo(o,{yPercent:100},{yPercent:0},"header+=.15").fromTo(c,{clipPath:"polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"},{clipPath:"polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",stagger:.05},"cards").fromTo(s,{yPercent:100},{yPercent:0},"cards+=.15").fromTo(l,{yPercent:100},{yPercent:0,stagger:.05},"cards+=.5").fromTo(u,{yPercent:100},{yPercent:0},"cards+=.5"),ScrollTrigger.create({trigger:r,start:"top 70%",markers:!1,animation:i})};var ve=()=>{document.querySelectorAll("[swiper_slider_controllable]").forEach(t=>{let o=t.querySelector("[swiper]"),n=t.querySelector("[swiper-wrapper]"),i=t.querySelectorAll("[swiper-slide]");o&&(o.classList.add("swiper"),n?.classList.add("swiper-wrapper"),i.forEach(s=>s.classList.add("swiper-slide")))}),document.querySelectorAll("[swiper_slider]").forEach(t=>{let o=t.querySelector("[swiper]"),n=o?.hasAttribute("swiper-default"),i=o?.hasAttribute("swiper-auto"),s=t.querySelector("[swiper-wrapper]"),l=t.querySelectorAll("[swiper-slide]"),c=t.querySelector("[swiper-button-next]")??null,u=t.querySelector("[swiper-button-prev]")??null,f=o?.hasAttribute("swiper-controller"),w=null;if(o){if(o.classList.add("swiper"),s?.classList.add("swiper-wrapper"),l.forEach(h=>h.classList.add("swiper-slide")),l.length<=1){c instanceof HTMLElement&&(c.style.display="none"),u instanceof HTMLElement&&(u.style.display="none");return}if(n?w=new Swiper(o,{loop:!0,speed:1e3,slidesPerView:"auto",grabCursor:!0,watchSlidesProgress:!0,navigation:{prevEl:u,nextEl:c}}):i&&(w=new Swiper(o,{loop:!0,speed:1e3,effect:"fade",fadeEffect:{crossFade:!0},spaceBetween:0,slidesPerView:"auto",autoplay:{delay:1e3,disableOnInteraction:!1},grabCursor:!1,watchSlidesProgress:!1,navigation:{prevEl:u,nextEl:c}})),w&&f){let h=o.getAttribute("swiper-control-id");if(!h)return;let g=document.querySelector(`[swiper-controllable][swiper-control-id="${h}"]`);if(!g)return;let a=new Swiper(g,{loop:!0,effect:"fade",fadeEffect:{crossFade:!0},slidesPerView:"auto",grabCursor:!1,watchSlidesProgress:!1,disableOnInteraction:!1});w.controller.control=a}}})};var Te=()=>{let r=document.querySelector(".header"),e=document.querySelector(".section_img-mosaic.is-transition");if(!r||!e){console.warn("Required elements not found.");return}function t(i,s){return!(i.bottom<s.top||i.top>s.bottom||i.right<s.left||i.left>s.right)}function o(i){if(!i||typeof i!="object"){console.warn("Invalid input: expected an object of CSS variables.");return}Object.entries(i).forEach(([s,l])=>{document.body.style.setProperty(s,l)})}function n(){let i=r.getBoundingClientRect(),s=e.getBoundingClientRect();t(i,s)?o(window.COLOR_THEMES[1]):o(window.COLOR_THEMES[0])}window.__overlapListeners=()=>{window.addEventListener("scroll",n,{passive:!0}),window.addEventListener("resize",n),n()},window.__removeOverlapListeners=()=>{window.removeEventListener("scroll",n),window.removeEventListener("resize",n)},window.__overlapListeners()},Ae=()=>{if(!window.COLOR_THEMES)return;let r=document.querySelector(".h-scroll_transition-wrap-wrap");if(!r){console.warn(".h-scroll_transition-wrap-wrap not found.");return}let e=r.querySelector(".h-scroll_transition-wrap");ScrollTrigger.create({trigger:r,start:"top top",end:`+=${e?e.getBoundingClientRect().width:0}`,onEnter:()=>Te(),onEnterBack:()=>Te(),onLeave:()=>{typeof window.__removeOverlapListeners=="function"&&window.__removeOverlapListeners()},onLeaveBack:()=>{typeof window.__removeOverlapListeners=="function"&&window.__removeOverlapListeners()}})};var qe=()=>new Promise(async r=>{let e=document.querySelector("[data-lottie]");if(!e){console.log("No lottie element found, skipping intro animation"),r();return}let t=e.getAttribute("data-lottie").split(","),o=t[Math.floor(Math.random()*t.length)];console.log({randomNumber:Math.floor(Math.random()*t.length)});let{DotLottie:n}=await import("https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web@latest/+esm"),i=document.querySelector("#intro");console.log(i);let s=document.createElement("canvas");s.style.cssText=`
+`;
+  };
+
+  // src/utils/mapNeeds.ts
+  var mapNeeds = () => {
+    const mapEl = document.querySelector(".the-map");
+    if (!mapEl)
+      return;
+    ((g) => {
+      var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window;
+      b = b[c] || (b[c] = {});
+      var d = b.maps || (b.maps = {}), r = /* @__PURE__ */ new Set(), e = new URLSearchParams(), u = () => h || (h = new Promise(async (f, n) => {
+        await (a = m.createElement("script"));
+        e.set("libraries", [...r] + "");
+        for (k in g)
+          e.set(
+            k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+            g[k]
+          );
+        e.set("callback", c + ".maps." + q);
+        a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+        d[q] = f;
+        a.onerror = () => h = n(Error(p + " could not load."));
+        a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+        m.head.append(a);
+      }));
+      d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n));
+    })({ key: "AIzaSyBcwe_qJ-IQwpuVJTWN5euk9fCzeoGwJhI", v: "weekly" });
+  };
+
+  // src/utils/modals.ts
+  var modals = () => {
+    const modalButtons = document.querySelectorAll('[button-function="modal-open"]');
+    modalButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const type = button.getAttribute("button-function-arg1");
+        const name = button.getAttribute("button-function-arg2");
+        const modal = document.querySelector(`[modal][modal-type=${type}][modal-name=${name}]`);
+        modal?.setAttribute("is-open", "");
+        document.body.style.top = `-${window.scrollY}px`;
+        document.body.classList.add("no-scroll");
+        stopSmoothScroll();
+      });
+    });
+    const modalCloseButtons = document.querySelectorAll("[modal-close]");
+    modalCloseButtons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        let scrollY = document.body.style.top;
+        scrollY = parseInt(scrollY || "0") * -1;
+        button.closest("[modal]")?.removeAttribute("is-open");
+        document.body.classList.remove("no-scroll");
+        document.body.style.top = "";
+        window.scrollTo(0, scrollY);
+        startSmoothScroll();
+      });
+    });
+  };
+
+  // src/utils/removeOrphans.ts
+  function preventOrphans(selector) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element) => {
+      if (element.hasAttribute("ignore-orphan"))
+        return;
+      if (!element.textContent)
+        return;
+      if (element.children.length)
+        return;
+      const textContent = element.textContent;
+      const words = textContent.split(" ");
+      if (words.length < 2)
+        return;
+      const lastTwoWords = words.slice(-2).join("\xA0");
+      const remainingWords = words.slice(0, -2).join(" ");
+      element.innerHTML = `${remainingWords} ${lastTwoWords}`;
+    });
+  }
+  var removeOrphans = () => {
+    preventOrphans("p");
+    preventOrphans(".orphan-free, [orphan-free]");
+    preventOrphans("h1, h2, h3, h4, h5, h6");
+  };
+
+  // src/utils/sortItems.ts
+  var sortItems = () => {
+    const parents = document.querySelectorAll("[data-sort]");
+    parents.forEach((parent) => {
+      const children = parent.querySelectorAll("[data-sort-order]");
+      children.forEach((child) => {
+        const sort = child.getAttribute("data-sort-order");
+        if (!sort)
+          return;
+        child.style.order = sort;
+      });
+    });
+  };
+
+  // src/utils/roomsCards.ts
+  var roomsCards = () => {
+    const roomsCards2 = document.querySelector(".rooms-cards-animation");
+    if (!roomsCards2)
+      return;
+    const headerTitle = roomsCards2.querySelector(".slider-1_header h2");
+    const headerDescription = roomsCards2.querySelector(".slider-1_content p");
+    const buttons = roomsCards2.querySelectorAll(".slider-1_nav a.slider-1_nav-button");
+    const cards = roomsCards2.querySelectorAll(".slider-1_item");
+    if (!headerTitle || !headerDescription || cards.length === 0)
+      return;
+    const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.inOut" } });
+    const titleSplits = Array.from(cards).map((card) => {
+      const title = card.querySelector(".slider-1_card-header h3");
+      const titlesSplit = new SplitText(title, {
+        type: "words,lines",
+        mask: "lines"
+      });
+      return titlesSplit.lines;
+    });
+    const descriptionSplits = Array.from(cards).map((card) => {
+      const description = card.querySelector(".text-rich-text p ");
+      const descriptionsSplit = new SplitText(description, {
+        type: "words,lines",
+        mask: "lines"
+      });
+      return descriptionsSplit.lines;
+    });
+    const cardsImages = Array.from(cards).map(
+      (card) => card.querySelector(".slider-1_item-fig")
+    );
+    const cardsButtonLinks = Array.from(cards).map(
+      (card) => card.querySelector(".slider-1_card-footer a")
+    );
+    const headerTitleSplit = new SplitText(headerTitle, {
+      type: "words,lines",
+      mask: "lines"
+    });
+    const headerDescriptionSplit = new SplitText(headerDescription, {
+      type: "words,lines",
+      mask: "lines"
+    });
+    gsap.set(buttons[0].parentElement, {
+      overflow: "hidden"
+    });
+    cards.forEach((card) => {
+      const button = card.querySelector(".slider-1_card-footer");
+      gsap.set(button, {
+        overflow: "hidden"
+      });
+    });
+    tl.add("header", 0);
+    tl.add("cards", 0.75);
+    tl.fromTo(
+      headerTitleSplit.lines,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0
+      },
+      "header"
+    ).fromTo(
+      headerDescriptionSplit.lines,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0,
+        stagger: 0.1
+      },
+      "header+=.15"
+    ).fromTo(
+      buttons,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0
+      },
+      "header+=.15"
+    ).fromTo(
+      cardsImages,
+      {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)"
+      },
+      {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        stagger: 0.05
+      },
+      "cards"
+    ).fromTo(
+      titleSplits,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0
+      },
+      "cards+=.15"
+    ).fromTo(
+      descriptionSplits,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0,
+        stagger: 0.05
+      },
+      "cards+=.5"
+    ).fromTo(
+      cardsButtonLinks,
+      {
+        yPercent: 100
+      },
+      {
+        yPercent: 0
+      },
+      "cards+=.5"
+    );
+    ScrollTrigger.create({
+      trigger: roomsCards2,
+      start: "top 70%",
+      // end: 'bottom 50%',
+      markers: false,
+      animation: tl
+    });
+  };
+
+  // src/utils/swiperSliders.ts
+  var swiperSliders = () => {
+    const sliderWrapperControllable = document.querySelectorAll("[swiper_slider_controllable]");
+    sliderWrapperControllable.forEach((slider) => {
+      const swiperEl = slider.querySelector("[swiper]");
+      const swiperWrapper = slider.querySelector("[swiper-wrapper]");
+      const swiperSlides = slider.querySelectorAll("[swiper-slide]");
+      if (!swiperEl)
+        return;
+      swiperEl.classList.add("swiper");
+      swiperWrapper?.classList.add("swiper-wrapper");
+      swiperSlides.forEach((s) => s.classList.add("swiper-slide"));
+    });
+    const sliderWrapper = document.querySelectorAll("[swiper_slider]");
+    sliderWrapper.forEach((slider) => {
+      const swiperEl = slider.querySelector("[swiper]");
+      const isDefault = swiperEl?.hasAttribute("swiper-default");
+      const isAuto = swiperEl?.hasAttribute("swiper-auto");
+      const swiperWrapper = slider.querySelector("[swiper-wrapper]");
+      const swiperSlides = slider.querySelectorAll("[swiper-slide]");
+      const nextEl = slider.querySelector("[swiper-button-next]") ?? null;
+      const prevEl = slider.querySelector("[swiper-button-prev]") ?? null;
+      const isController = swiperEl?.hasAttribute("swiper-controller");
+      let swiper = null;
+      if (!swiperEl)
+        return;
+      swiperEl.classList.add("swiper");
+      swiperWrapper?.classList.add("swiper-wrapper");
+      swiperSlides.forEach((s) => s.classList.add("swiper-slide"));
+      if (swiperSlides.length <= 1) {
+        if (nextEl instanceof HTMLElement)
+          nextEl.style.display = "none";
+        if (prevEl instanceof HTMLElement)
+          prevEl.style.display = "none";
+        return;
+      }
+      if (isDefault) {
+        swiper = new Swiper(swiperEl, {
+          loop: true,
+          speed: 1e3,
+          slidesPerView: "auto",
+          grabCursor: true,
+          watchSlidesProgress: true,
+          navigation: {
+            prevEl,
+            nextEl
+          }
+        });
+      } else if (isAuto) {
+        swiper = new Swiper(swiperEl, {
+          loop: true,
+          speed: 1e3,
+          effect: "fade",
+          fadeEffect: {
+            crossFade: true
+          },
+          spaceBetween: 0,
+          slidesPerView: "auto",
+          autoplay: {
+            delay: 1e3,
+            disableOnInteraction: false
+          },
+          grabCursor: false,
+          watchSlidesProgress: false,
+          navigation: {
+            prevEl,
+            nextEl
+          }
+        });
+      }
+      if (swiper && isController) {
+        const controlId = swiperEl.getAttribute("swiper-control-id");
+        if (!controlId)
+          return;
+        const syncedSwiper = document.querySelector(
+          `[swiper-controllable][swiper-control-id="${controlId}"]`
+        );
+        if (!syncedSwiper)
+          return;
+        const controllableSwiper = new Swiper(syncedSwiper, {
+          loop: true,
+          effect: "fade",
+          fadeEffect: {
+            crossFade: true
+          },
+          slidesPerView: "auto",
+          grabCursor: false,
+          watchSlidesProgress: false,
+          disableOnInteraction: false
+        });
+        swiper.controller.control = controllableSwiper;
+      }
+    });
+  };
+
+  // src/utils/colorScrollForHScroll.ts
+  var checkElementOverlap = () => {
+    const header = document.querySelector(".header");
+    const target = document.querySelector(".section_img-mosaic.is-transition");
+    if (!header || !target) {
+      console.warn("Required elements not found.");
+      return;
+    }
+    function isIntersecting(rect1, rect2) {
+      return !(rect1.bottom < rect2.top || rect1.top > rect2.bottom || rect1.right < rect2.left || rect1.left > rect2.right);
+    }
+    function applyCSSVariablesToBody(variables) {
+      if (!variables || typeof variables !== "object") {
+        console.warn("Invalid input: expected an object of CSS variables.");
+        return;
+      }
+      Object.entries(variables).forEach(([key, value]) => {
+        document.body.style.setProperty(key, value);
+      });
+    }
+    function updateIntersectionStatus() {
+      const headerRect = header.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      if (isIntersecting(headerRect, targetRect)) {
+        applyCSSVariablesToBody(window.COLOR_THEMES[1]);
+      } else {
+        applyCSSVariablesToBody(window.COLOR_THEMES[0]);
+      }
+    }
+    window.__overlapListeners = () => {
+      window.addEventListener("scroll", updateIntersectionStatus, { passive: true });
+      window.addEventListener("resize", updateIntersectionStatus);
+      updateIntersectionStatus();
+    };
+    window.__removeOverlapListeners = () => {
+      window.removeEventListener("scroll", updateIntersectionStatus);
+      window.removeEventListener("resize", updateIntersectionStatus);
+    };
+    window.__overlapListeners();
+  };
+  var colorScrollForHScroll = () => {
+    if (!window.COLOR_THEMES)
+      return;
+    const scrollWrap = document.querySelector(".h-scroll_transition-wrap-wrap");
+    if (!scrollWrap) {
+      console.warn(".h-scroll_transition-wrap-wrap not found.");
+      return;
+    }
+    const scrollWrapper = scrollWrap.querySelector(".h-scroll_transition-wrap");
+    ScrollTrigger.create({
+      trigger: scrollWrap,
+      start: "top top",
+      end: `+=${scrollWrapper ? scrollWrapper.getBoundingClientRect().width : 0}`,
+      onEnter: () => checkElementOverlap(),
+      onEnterBack: () => checkElementOverlap(),
+      onLeave: () => {
+        if (typeof window.__removeOverlapListeners === "function") {
+          window.__removeOverlapListeners();
+        }
+      },
+      onLeaveBack: () => {
+        if (typeof window.__removeOverlapListeners === "function") {
+          window.__removeOverlapListeners();
+        }
+      }
+    });
+  };
+
+  // src/utils/intro.ts
+  var intro = () => {
+    return new Promise(async (resolve) => {
+      const lottieElement = document.querySelector("[data-lottie]");
+      if (!lottieElement) {
+        console.log("No lottie element found, skipping intro animation");
+        resolve();
+        return;
+      }
+      const links = lottieElement.getAttribute("data-lottie").split(",");
+      const randomLink = links[Math.floor(Math.random() * links.length)];
+      console.log({ randomNumber: Math.floor(Math.random() * links.length) });
+      const { DotLottie } = await import(
+        // @ts-ignore
+        "https://cdn.jsdelivr.net/npm/@lottiefiles/dotlottie-web@latest/+esm"
+      );
+      const target = document.querySelector("#intro");
+      console.log(target);
+      const canvas = document.createElement("canvas");
+      canvas.style.cssText = `
       width: 100%;
     `;
       canvas.id = "lottie-animation";
@@ -2247,6 +2671,7 @@
   window.Webflow ||= [];
   window.Webflow.push(() => {
     const isHomePage = document.querySelector("[data-lottie]");
+    window.TESTCOMMIT = "testcommit";
     if (isHomePage) {
       setupHeroIntro();
       intro().then(() => {

@@ -66,6 +66,9 @@ export const horizontalScroll = () => {
       x: '100vw',
       xPercent: -100,
       ease: 'none',
+      onComplete: () => {
+        gsap.to(titleSplit.words, { yPercent: 0, ease: 'power2.out', stagger: 0.05 });
+      },
     });
 
     tl.to('.section_img-mosaic .img-mosaic_component', {
