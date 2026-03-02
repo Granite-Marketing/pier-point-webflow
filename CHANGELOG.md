@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.36
+
+### Patch Changes
+
+- fix blue section animation
+
 ## 1.0.35
 
 ### Patch Changes
