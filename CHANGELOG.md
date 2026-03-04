@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.37
+
+### Patch Changes
+
+- fix maps issue
+
 ## 1.0.36
 
 ### Patch Changes
