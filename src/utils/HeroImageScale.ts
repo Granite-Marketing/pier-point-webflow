@@ -319,7 +319,6 @@ export const setupHeroIntro = () => {
   const headerBar = document.querySelector('.header_bar');
 
   const cta = document.querySelector('.floating-cta');
-  
   // Guard: Exit if required elements don't exist
   if (!svg && !mobSvg) return;
   if (images.length === 0) return;

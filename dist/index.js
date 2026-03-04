@@ -2067,11 +2067,23 @@
     if (!mapZoom)
       mapZoom = 17;
     mapZoom = Number(mapZoom);
+    const cleanMapStyle = [
+      {
+        featureType: "poi",
+        // points of interest
+        stylers: [{ visibility: "off" }]
+      },
+      {
+        featureType: "transit",
+        stylers: [{ visibility: "off" }]
+      }
+    ];
     const { Map } = await google.maps.importLibrary("maps");
     map = new Map(mapEl, {
       zoom: mapZoom,
       center: centerPosition,
-      mapId: "DEMO_MAP_ID"
+      mapId: "PIERPOINT_MAP_ID",
+      styles: cleanMapStyle
     });
     await setInfoWindow();
     readPinColors(mapEl);
