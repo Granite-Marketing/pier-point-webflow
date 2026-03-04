@@ -45,7 +45,7 @@ export const initMap = async () => {
   createPinSvgs();
 
   positions.forEach((p) => {
-    createMarker(p, positions.length == 1, infoWindow);
+    createMarker(p, positions.length == 1, infoWindow, positions);
   });
 
   mapInteractions(positions, infoWindow);
@@ -102,7 +102,7 @@ const setInfoWindow = async () => {
   infoWindow = new InfoWindow();
 };
 
-const createMarker = async (p, active, infoWindow) => {
+const createMarker = async (p, active, infoWindow, positions) => {
   const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
 
   const parser = new DOMParser();
@@ -119,12 +119,15 @@ const createMarker = async (p, active, infoWindow) => {
 
   markers.push({ marker: marker, slug: p.slug });
 
-  marker.addListener('click', ({ domEvent, latLng }) => {
-    const { target } = domEvent;
-
+  marker.addListener('click', () => {
     infoWindow.close();
     infoWindow.setContent(marker.title);
     infoWindow.open(marker.map, marker);
+
+    // Sync active state when clicking the map icon directly
+    if (p.slug) {
+      setActiveMarker(p.slug, positions);
+    }
   });
 
   if (p.unique) {
@@ -133,51 +136,56 @@ const createMarker = async (p, active, infoWindow) => {
   }
 };
 
+const setActiveMarker = (slug: string | null, positions: { unique?: boolean; slug?: string }[]) => {
+  const mapCoordWraps = document.querySelectorAll('[the-map-coord-wrap]');
+
+  mapCoordWraps.forEach((w) => {
+    if (w.getAttribute('slug') === slug) {
+      w.classList.add('is-active');
+    } else {
+      w.classList.remove('is-active');
+    }
+  });
+
+  markers.forEach((m) => {
+    const uniquePin = positions.find((p) => p.unique);
+    if (uniquePin && !m.slug) return;
+    const styles =
+      m.slug === slug
+        ? {
+            transform: 'scale(1.5)',
+            stroke: colors.active.line,
+            fill: colors.active.bg,
+            zIndex: '101010',
+          }
+        : {
+            transform: 'scale(1)',
+            stroke: colors.normal.line,
+            fill: colors.normal.bg,
+            zIndex: '1',
+          };
+    m.marker.targetElement.querySelector('svg').style.transform = styles.transform;
+    m.marker.targetElement.style.zIndex = styles.zIndex;
+    m.marker.targetElement
+      .querySelectorAll('svg path')
+      .forEach((path) => (path.style.stroke = styles.stroke));
+    m.marker.targetElement
+      .querySelectorAll('svg circle')
+      .forEach((c) => (c.style.fill = styles.fill));
+  });
+};
+
 const mapInteractions = (positions, infoWindow) => {
   const mapCoordWraps = document.querySelectorAll('[the-map-coord-wrap]');
   mapCoordWraps.forEach((w) => {
     w.addEventListener('click', () => {
       infoWindow.close();
-      let slug = '';
-
-      if (w.classList.contains('is-active')) {
-        w.classList.remove('is-active');
-      } else {
+      let slug: string | null = null;
+      if (!w.classList.contains('is-active')) {
         slug = w.getAttribute('slug');
         if (!slug) return;
-        w.classList.add('is-active');
       }
-
-      markers.forEach((m) => {
-        const uniquePin = positions.filter((p) => p.unique);
-        if (uniquePin.slug == m.slug) return;
-        const styles =
-          m.slug === slug
-            ? {
-                transform: 'scale(1.5)',
-                stroke: colors.active.line,
-                fill: colors.active.bg,
-                zIndex: '101010',
-              }
-            : {
-                transform: 'scale(1)',
-                stroke: colors.normal.line,
-                fill: colors.normal.bg,
-                zIndex: '1',
-              };
-        m.marker.targetElement.querySelector('svg').style.transform = styles.transform;
-        m.marker.targetElement.style.zIndex = styles.zIndex;
-        m.marker.targetElement
-          .querySelectorAll('svg path')
-          .forEach((p) => (p.style.stroke = styles.stroke));
-        m.marker.targetElement
-          .querySelectorAll('svg circle')
-          .forEach((c) => (c.style.fill = styles.fill));
-      });
-
-      mapCoordWraps.forEach((ow) => {
-        if (ow !== w) ow.classList.remove('is-active');
-      });
+      setActiveMarker(slug, positions);
     });
   });
 };
@@ -196,6 +204,8 @@ const readPinColors = (mapEl) => {
   if (c3) colors.active.line = c3;
   if (c4) colors.unique.bg = c4;
   if (c5) colors.unique.line = c5;
+
+  console.log('colors', c0, c1, c2, c3, c4, c5);
 };
 
 const createPinSvgs = () => {
