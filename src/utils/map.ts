@@ -47,7 +47,7 @@ export const initMap = async () => {
   map = new Map(mapEl, {
     zoom: mapZoom,
     center: centerPosition,
-    mapId: 'PIERPOINT_MAP_ID',
+    mapId: '4164febb450c6d069cc1c4d2',
     styles: cleanMapStyle,
   });
 

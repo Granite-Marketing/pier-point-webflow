@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.39
+
+### Patch Changes
+
+- update: add new map ID
+
 ## 1.0.38
 
 ### Patch Changes
