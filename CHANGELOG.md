@@ -1,5 +1,11 @@
 # @granite-marketing/pier-point-webflow
 
+## 1.0.40
+
+### Patch Changes
+
+- fix: map not pushed
+
 ## 1.0.39
 
 ### Patch Changes
